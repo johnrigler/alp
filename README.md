@@ -1,8 +1,25 @@
 # alp
 
---- alp
- - a
- - b
- - c
-ALP is a set of bash functions which seeks to capture and
- document a blockchain transaction in a readable and trustable way.  It seeks to extend ethereum into religion and law.  When using this shell, all actions are to be considered ministerial actions of a sub denomination of soirism, which is simply a religion synthesized for such purposes.
+--- AnnOliviaPlurabelle : Ann Olivia
+ - written in a restricted bash shell, with curl access at the base level.
+ - logs into various typescripts and history files 
+ - maps to PHP pages which are rendered as a simple menu structure
+ - keeps critical data memory resident and therefore hidden
+ - should be very easy to understand
+ - relies on shell inheritance and overloading
+ - seeks to elucidate how ethereum can be used in conjunction to religion and law
+ - an abstract religion known as soirism is defacto declared by the use of this package
+
+-() { :; }
+
+soirism() {
+
+- true
+
+}
+
+o.foenix.culprit() {
+
+- Finnegans Wake reference
+
+}

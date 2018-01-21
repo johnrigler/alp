@@ -1,0 +1,17 @@
+#!/bin/bash 
+
+echo fiona
+
+declare -f o.foenix.culprit
+
+o.foenix.culprit () 
+{ 
+    :
+}
+
+testfun () 
+{
+    echo test
+}
+
+

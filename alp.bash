@@ -16,4 +16,4 @@ alp() {
 
 bash -r
 
-} ; alp
+} 

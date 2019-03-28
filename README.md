@@ -7,7 +7,7 @@
  - keeps critical data memory resident and therefore hidden
  - should be very easy to understand
  - relies on shell inheritance and overloading
- - seeks to elucidate how ethereum can be used in conjunction to religion and law
+ - seeks to elucidate how cryptocurrency can be used in conjunction to religion and law
  - an abstract religion known as soirism is defacto declared by the use of this package
 
 -() { :; }
@@ -23,3 +23,4 @@ o.foenix.culprit() {
 - Finnegans Wake reference
 
 }
+

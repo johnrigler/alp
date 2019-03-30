@@ -1,5 +1,7 @@
--() { echo $*; }
-echo welcome from alp
+-() { echo $*; } 
+_ALP_DIR=~/alp
+_ALP_SRC=$_ALP_DIR/alp.bash
+echo welcome from alp;
 
 ƒ() {
 
@@ -15,8 +17,8 @@ declare -F $1;
 
 √() {
 
-vi ~/alp/alp.bash
-. ~/alp/alp.bash
+vi $_ALP_SRC
+. $_ALP_SRC 
 } 
 
 √∫() {
@@ -31,4 +33,4 @@ sum | sed 's/\ .*//';
 
 } 
 
-alias Å=alias
+. $_ALP_DIR/public/ƒß-38889;

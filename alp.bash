@@ -1,7 +1,8 @@
+if [ ! $_ALP_DIR ]; then 
+
 -() { echo $*; } 
 _ALP_DIR=~/alp
 _ALP_SRC=$_ALP_DIR/alp.bash
-echo welcome from alp;
 
 ƒ() {
 
@@ -34,3 +35,5 @@ sum | sed 's/\ .*//';
 } 
 
 . $_ALP_DIR/public/ƒß-38889;
+
+fi

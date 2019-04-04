@@ -1,0 +1,17 @@
+€ () 
+{ 
+    __PID_ECHO='echo $_'"$$";
+    echo $__PID_ECHO
+}
+# In bash we have one sort of
+# unique lambda hack
+# which revolves around 
+# the process id of the
+# running task
+# 
+# so £ and € provide a way
+# to load and retrieve a 
+# variable from this 
+# system that will
+# not collide with something
+# from a script

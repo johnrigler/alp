@@ -1,0 +1,100 @@
+Ï () 
+{ 
+    declare -F $1
+}
+ß () 
+{ 
+    sum | sed 's/\ .*//'
+}
+ƒ () 
+{ 
+    declare -f $1
+}
+ƒß () 
+{ 
+    _FB=$(echo $1 $(ƒ $1 | ß) | sed 's/ /-/');
+    declare -f $1 > $_FB
+}
+√ () 
+{ 
+    vi $_ALP_SRC;
+    . $_ALP_SRC
+}
+√π () 
+{ 
+    pr-edit $*
+}
+√∫ () 
+{ 
+    vi ~/.bashrc;
+    . ~/.bashrc
+}
+- () 
+{ 
+    echo $*
+}
+hedera () 
+{ 
+    echo "Hello Future";
+    export HEDERA_DIR=~/poprocks/hedera;
+    ls $HEDERA_DIR;
+    function tata () 
+    { 
+        VPN_GW="63.243.250.10";
+        VPN_GW2="209.58.86.86";
+        : Hedera-Tata1:CommUS$$01;
+        : hgcadmin:hgcadmin;
+        : hgcadmin@schgnode01
+    }
+}
+me.good.test () 
+{ 
+    pwd
+}
+pr-date () 
+{ 
+    date "+%Y-%W-%w"
+}
+pr-edit () 
+{ 
+    if [ "x"$1 == "x" ]; then
+        vi ~/poprocks/poprocks.bash;
+        . ~/poprocks/poprocks.bash;
+    else
+        vi ~/poprocks/$(pr-date)/$1-ts;
+    fi
+}
+pr-env () 
+{ 
+    env | grep _POPROCKS
+}
+pr-git-who () 
+{ 
+    git config --global user.email "john@rigler.org";
+    git config --global user.name "John Rigler"
+}
+pr-home () 
+{ 
+    cd $_POPROCKS_DIR
+}
+pr-script () 
+{ 
+    NAME="~/poprocks/$(pr-date)";
+    mkdir -p $NAME;
+    script -a $NAME/$1-ts;
+    : if ARGV1 is not specified, then name the file '-ts'
+}
+pr-script-name () 
+{ 
+    ps -ef | grep poprocks | grep script | cut -c 60-
+}
+pr-transcribe () 
+{ 
+    cat ~/poprocks/$(pr-date)/$1-ts;
+    : will only work on same day as written
+}
+pr-vi.bash.rc () 
+{ 
+    vi ~/.bashrc;
+    . ~/.bashrc
+}

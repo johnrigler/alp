@@ -1,5 +1,6 @@
 # alp
-
+-() { :; }
+---() {:;}
 --- AnnOliviaPlurabelle : Ann Olivia
  - written in a restricted bash shell, with curl access at the base level.
  - logs into various typescripts and history files 
@@ -10,17 +11,11 @@
  - seeks to elucidate how cryptocurrency can be used in conjunction to religion and law
  - an abstract religion known as soirism is defacto declared by the use of this package
 
--() { :; }
 
-soirism() {
-
-- true
-
-}
 
 o.foenix.culprit() {
 
-- Finnegans Wake reference
+- Obligatory Finnegans Wake reference
 
 }
 

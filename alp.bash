@@ -7,7 +7,7 @@ env | grep '_ALP'
 }
 
 a.f() {
-# ƒ() {
+: ƒ
 : https://en.wikipedia.org/wiki/Florin_sign
 : is a shortcut for
 declare -f $1;
@@ -15,7 +15,7 @@ declare -f $1;
 }
 
 a.F() {
-# Ï() {
+: Ï
 : https://en.wikipedia.org/wiki/%C3%8F
 : is a shortcut for
 declare -F $1;
@@ -23,7 +23,7 @@ declare -F $1;
 }
 
 a.v() {
-# √() {
+: √
 
 if [ $_ALP_TARGET ]; then
 echo xxxxxxxxxxxx
@@ -43,10 +43,48 @@ vi ~/.bashrc
 }
 
 a.s() {
-# ß() {
+: ß
+sum | while read A B
+do
+echo $A.$B
+done 
 
-sum | sed 's/\ .*//';
+}
 
+a.sho() {
+while read LINE
+do
+echo $LINE \
+ | sed 's/7/9/g' \
+ | sed 's/6/8/g' \
+ | sed 's/5/7/g' \
+ | sed 's/4/6/g' \
+ | sed 's/3/5/g' \
+ | sed 's/2/4/g' \
+ | sed 's/1/3/g' \
+ | sed 's/0/2/g' 
+done
+}
+
+a.S() {
+cksum | while read A B
+do
+A=$(echo "obase=8; $A" | bc | a.sho)
+B=$(echo "obase=8; $B" | bc | a.sho)
+echo $A.$B
+done
 } 
 
-. $_ALP_DIR/public/ƒß-38889;
+a.fs () 
+{ 
+    _FS=$(echo $1 $(a.f $1 | a.s) | sed 's/ /-/');
+    declare -f $1 > $_FS
+    echo $_FS
+}
+
+a.fS ()
+{
+    _FS=$(echo $1 $(a.f $1 | a.S) | sed 's/ /-/');
+    declare -f $1 > $_FS
+    echo $_FS
+}

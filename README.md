@@ -1,4 +1,4 @@
-The purpose of ALP is the load a set of shell functions for use with creating tiny hashes to embed into relatively large Satoshi Codes (Advances Satoshi Codes) into cryptocurrency transactions.  The codes can modify existing transaction as a sort of externally recorded memo.  The codes can also be sent to Obviously Unspendable Addresses which spell out human-readable messages with the intention of being externally referenced in legal documents.
+The purpose of ALP is the load a set of shell functions for use with creating tiny hashes to embed into relatively large Satoshi Codes (Advances Satoshi Codes) via cryptocurrency transactions.  The codes can modify existing transaction as a sort of externally recorded memo.  The codes can also be sent to Obviously Unspendable Addresses which spell out human-readable messages with the intention of being externally referenced in legal documents.
 
 This system is Open-Source, covered by an Apache 2.0 license. 
 
@@ -39,3 +39,7 @@ o.foenix.culprit() {
 
 }
 
+
+If the religion part above seems wierd, then just ignore it.  I believe that we need a secular religious subsystem that can be introduced into legal documents.  For this reason, I insert religious legal claims into all sorts of places.  If you want to use this system in an absolutely non-religous legal context, then connect the linguistic elements with a dash, which is more standard, but really this intended for a very small audience.
+
+C ya.

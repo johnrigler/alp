@@ -1,9 +1,0 @@
-#!/bin/bash
-
-: I am the Fireman.
-
-shaun() {
-
-echo "You made it to Paradise. Oh Happy Fall!"
-
-}

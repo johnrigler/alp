@@ -88,3 +88,7 @@ a.fS ()
     declare -f $1 > $_FS
     echo $_FS
 }
+a.Sh () 
+{ 
+    a.f $1 > $1-$(a.f $1 | a.S | cut -c 1-7)
+}

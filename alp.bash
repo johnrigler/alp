@@ -93,3 +93,7 @@ a.ttd ()
     T=$(echo $1 | tr 'abcdefghIjklmnOpqrstuvwxyz(){}:; .' 'ABCDEFGHiJKLMNoPQRSTUVWXYZdbqpcsxz');
     echo $T | sed 's/-/t/g' | sed "s/'/v/g" | sed 's/\//j/g'
 }
+ustest () 
+{ 
+    unspendable D $(a.ttd "DCx-() { : stuff; }")xxxxxxxxx 30
+}

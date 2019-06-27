@@ -1,5 +1,7 @@
 export _ALP_DIR=~/alp
 export _ALP_SRC=$_ALP_DIR/alp.bash
+export VISUAL=vim
+export EDITOR="$VISUAL"
 
 
 a.e() {
@@ -7,26 +9,18 @@ env | grep '_ALP'
 }
 
 a.f() {
-: ƒ
-: https://en.wikipedia.org/wiki/Florin_sign
-: is a shortcut for
 declare -f $1;
 
 }
 
 a.F() {
-: Ï
-: https://en.wikipedia.org/wiki/%C3%8F
-: is a shortcut for
 declare -F $1;
 
 }
 
 a.v() {
-: √
 
 if [ $_ALP_TARGET ]; then
-echo xxxxxxxxxxxx
 vi $_ALP_TARGET
 . $_ALP_TARGET
 else
@@ -36,14 +30,12 @@ fi
 } 
 
 a.vb() {
-# √∫() {
 
 vi ~/.bashrc
 . ~/.bashrc
 }
 
 a.s() {
-: ß
 sum | while read A B
 do
 echo $A.$B
@@ -91,4 +83,13 @@ a.fS ()
 a.Sh () 
 { 
     a.f $1 > $1-$(a.f $1 | a.S | cut -c 1-7)
+}
+a.ots () 
+{ 
+    echo $1 | tr '01234567' '23456789'
+}
+a.ttd () 
+{ 
+    T=$(echo $1 | tr 'abcdefghIjklmnOpqrstuvwxyz(){}:; .' 'ABCDEFGHiJKLMNoPQRSTUVWXYZdbqpcsxz');
+    echo $T | sed 's/-/t/g' | sed "s/'/v/g" | sed 's/\//j/g'
 }

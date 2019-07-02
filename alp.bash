@@ -20,9 +20,13 @@ declare -F $1;
 
 a.v() {
 
+a.f $1 > $$
+_ALP_TARGET=$$
+
 if [ $_ALP_TARGET ]; then
 vi $_ALP_TARGET
 . $_ALP_TARGET
+rm $$
 else
 vi $_ALP_SRC
 . $_ALP_SRC 
@@ -90,10 +94,29 @@ a.ots ()
 }
 a.ttd () 
 { 
-    T=$(echo $1 | tr 'abcdefghIjklmnOpqrstuvwxyz(){}:; .' 'ABCDEFGHiJKLMNoPQRSTUVWXYZdbqpcsxz');
+    T=$(echo $1 | tr 'abcdefghIjklmnOpqrstuvwxyz(){}:;" .' 'ABCDEFGHiJKLMNoPQRSTUVWXYZdbqpcswxy');
     echo $T | sed 's/-/t/g' | sed "s/'/v/g" | sed 's/\//j/g'
 }
 ustest () 
 { 
     unspendable D $(a.ttd "DCx-() { : stuff; }")xxxxxxxxx 30
+}
+a.dtt () 
+{ 
+    T=$1;
+    T=$(echo $1 | sed 's/t/\-/g' | sed "s/v/'/" | sed 's/j/\//g');
+    T=$(echo $T | tr 'ABCDEFGHiJKLMNoPQRSTUVWXYZdbqpcswxy' 'abcdefghIjklmnOpqrstuvwxyz(){}:;" .' | sed 's/z.*//g')
+    echo $T | cut -c 4-
+}
+a.u () 
+{ 
+    if [[ $2 == 'd' ]]; then
+        a.ud $1;
+    else
+        unspendable D DCx"$1" 30;
+    fi
+}
+a.ud () 
+{ 
+    mkdir $(a.u $*)
 }

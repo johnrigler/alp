@@ -120,3 +120,27 @@ a.ud ()
 { 
     mkdir $(a.u $*)
 }
+a.lsu () 
+{ 
+    /bin/ls $LS_OPTIONS -ld DCx$1* | grep DCx$1 | cut -c 42-75
+}
+a.dci () 
+{ 
+    : T=DSENDxYoURxZiPCoDExASxFUNDSxydsw7y;
+    T=$1;
+    curl https://chain.so/api/v2/address/DOGE/$T;
+    : curl https://dogechain.info/api/v1/unspent/$1
+}
+a.mkdir () 
+{ 
+    mkdir $1;
+    chmod 705 $1;
+    cd $1;
+    cp ../index.php .;
+    ln -s ../style.css .;
+    ln -s ../dir.php .
+}
+a.seq () 
+{ 
+    /bin/ls $LS_OPTIONS -sort | cut -c 40- | sed 's/.*..-//g' | grep ".1" | sed 's/\.1//g' > seq.txt
+}

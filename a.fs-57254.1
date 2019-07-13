@@ -1,0 +1,6 @@
+a.fs () 
+{ 
+    _FS=$(echo $1 $(a.f $1 | a.s) | sed 's/ /-/');
+    declare -f $1 > $_FS;
+    echo $_FS
+}

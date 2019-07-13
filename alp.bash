@@ -191,3 +191,4 @@ her.story ()
     _HER_STORY=`history | tail -2 | head -1 | cut -c 28-`;
     echo "$1 () { $_HER_STORY ; }"
 }
+a-test-for-arg-1 () { if [ x$1 != x ]; then echo blank; else  echo $1; fi ; }

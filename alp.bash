@@ -188,7 +188,12 @@ color ()
 her.story () 
 { 
     : her story was always better than his.tory;
-    _HER_STORY=`history | tail -2 | head -1 | cut -c 28-`;
-    echo "$1 () { $_HER_STORY ; }"
+    function his.tory () 
+    { 
+        history | tail -2 | head -1 | while read FIRST REST; do
+            echo $REST;
+        done
+    };
+    _HER_STORY=$(his.tory );
+    eval $(echo "$1 () { $_HER_STORY ; } " )
 }
-a-test-for-arg-1 () { if [ x$1 != x ]; then echo blank; else  echo $1; fi ; }

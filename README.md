@@ -14,23 +14,8 @@ After an exhaustive inspection of the laws and practices surrounding charitable 
 
 As I am a devout Secularist (Please see Charles Taylor's 'A Secular Age'), I personally claim to practice an expedient secular form of religion which I call Soirism and would refer to an ALP function/secret as a Soirentz.  This may seem like an odd claim, but it for a purely Utilitarian purpose.
 
-Thanks, enjoy the madness and the many many opaque references to "Finnegans Wake"
-
-
-
-# alp
--() { :; }
----() {:;}
---- AnnOliviaPlurabelle : Ann Olivia
- - written in a restricted bash shell, with curl access at the base level.
- - logs into various typescripts and history files 
- - maps to PHP pages which are rendered as a simple menu structure
- - keeps critical data memory resident and therefore hidden
- - should be very easy to understand
- - relies on shell inheritance and overloading
- - seeks to elucidate how cryptocurrency can be used in conjunction to religion and law
- - an abstract religion known as soirism is defacto declared by the use of this package
-
+Good news, ALP now seeks to fan out across the Cloud using terraform. The tf.bash
+library begins to build a structure that dovetails into 
 
 
 o.foenix.culprit() {
@@ -38,8 +23,3 @@ o.foenix.culprit() {
 - Obligatory Finnegans Wake reference
 
 }
-
-
-If the religion part above seems wierd, then just ignore it.  I believe that we need a secular religious subsystem that can be introduced into legal documents.  For this reason, I insert religious legal claims into all sorts of places.  If you want to use this system in an absolutely non-religous legal context, then connect the linguistic elements with a dash, which is more standard, but really this intended for a very small audience.
-
-C ya.

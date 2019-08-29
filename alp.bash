@@ -3,6 +3,8 @@ export _ALP_SRC=$_ALP_DIR/alp.bash
 export VISUAL=vim
 export EDITOR="$VISUAL"
 
+. $_ALP_DIR/tf.bash
+
 
 a.e() {
 env | grep '_ALP'

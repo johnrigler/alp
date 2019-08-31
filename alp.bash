@@ -197,3 +197,19 @@ done
     );
     echo "$1 () { $_HER_STORY ; }"
 }
+a.hs () 
+{ 
+    function - () 
+    { 
+        echo "$1 () {";
+        echo "$*" | while read FIRST SEC REST; do
+            echo $REST;
+        done;
+        echo "}"
+    };
+    - $1 $(history | tail -2 | head -1) > $$;
+    . $$;
+    a.f $1;
+    rm $$;
+    : - "$1 () { $_T ; }"
+}

@@ -197,7 +197,7 @@ done
     );
     echo "$1 () { $_HER_STORY ; }"
 }
-a.hs () 
+a.h () 
 { 
     function - () 
     { 

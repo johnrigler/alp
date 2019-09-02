@@ -1,0 +1,28 @@
+dc () 
+{ 
+    dogecoin-cli $*
+}
+dc.gbh () 
+{ 
+    dc getblockhash $1
+}
+dc.tx () 
+{ 
+    dc getblock $(dc.gbh $1 ) | grep --color=auto '    "' | cut -c 6-69
+}
+dc.out () 
+{ 
+    dc.tx $1 | while read TX; do
+        dc gettxout "$TX" 1 | jq .;
+    done
+}
+dc.gettxout () 
+{ 
+    dc gettxout "$1" 1 | egrep --color=auto --color=auto 'val|     "' | xargs -n 3 | sed 's/,//g' | awk '{ print $3 " " $2 }'
+}
+dc.DC.out () 
+{ 
+    dc.tx $1 | while read TX; do
+        dc.gettxout $TX;
+    done | grep --color=auto "^DC"
+}

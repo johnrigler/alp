@@ -1,0 +1,6 @@
+git.build() {
+export GIT_DIR=".git"
+. ./alp.bash
+}
+
+git.build

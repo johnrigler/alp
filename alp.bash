@@ -1,4 +1,4 @@
-export _ALP_DIR=~/alp
+export _ALP_DIR=~/dimecash/alp
 export _ALP_SRC=$_ALP_DIR/alp.bash
 export VISUAL=vim
 export EDITOR="$VISUAL"

@@ -1,5 +1,3 @@
-. $_ALP_DIR/tf.bash
-
 
 a.e() {
 env | grep '_ALP'
@@ -85,58 +83,6 @@ a.Sh ()
 { 
     a.f $1 > $1-$(a.f $1 | a.S | cut -c 1-7)
 }
-a.ots () 
-{ 
-    echo $1 | tr '01234567' '23456789'
-}
-a.ttd () 
-{ 
-    T=$(echo $1 | tr 'abcdefghIjklmnOpqrstuvwxyz(){}:;" .' 'ABCDEFGHiJKLMNoPQRSTUVWXYZdbqpcswxy');
-    echo $T | sed 's/-/t/g' | sed "s/'/v/g" | sed 's/\//j/g'
-}
-ustest () 
-{ 
-    unspendable D $(a.ttd "DCx-() { : stuff; }")xxxxxxxxx 30
-}
-a.dtt () 
-{ 
-    T=$1;
-    T=$(echo $1 | sed 's/t/\-/g' | sed "s/v/'/" | sed 's/j/\//g');
-    T=$(echo $T | tr 'ABCDEFGHiJKLMNoPQRSTUVWXYZdbqpcswxy' 'abcdefghIjklmnOpqrstuvwxyz(){}:;" .' | sed 's/z.*//g')
-    echo $T | cut -c 4-
-}
-a.u () 
-{ 
-    if [[ $2 == 'd' ]]; then
-        a.ud $1;
-    else
-        unspendable D DCx"$1" 30;
-    fi
-}
-a.ud () 
-{ 
-    mkdir $(a.u $*)
-}
-a.lsu () 
-{ 
-    /bin/ls $LS_OPTIONS -ld DCx$1* | grep DCx$1 | cut -c 42-75
-}
-a.dci () 
-{ 
-    : T=DSENDxYoURxZiPCoDExASxFUNDSxydsw7y;
-    T=$1;
-    curl https://chain.so/api/v2/address/DOGE/$T;
-    : curl https://dogechain.info/api/v1/unspent/$1
-}
-a.mkdir () 
-{ 
-    mkdir $1;
-    chmod 705 $1;
-    cd $1;
-    cp ../index.php .;
-    ln -s ../style.css .;
-    ln -s ../dir.php .
-}
 a.seq () 
 { 
     /bin/ls $LS_OPTIONS -sort | cut -c 40- | sed 's/.*..-//g' | grep ".1" | sed 's/\.1//g' > seq.txt
@@ -182,7 +128,7 @@ color ()
         printf "\033[$FG";
     fi
 }
-her.story () 
+a.her.story () 
 { 
     : her story was always better than his.tory;
     _HER_STORY=$(history | tail -2 | head -1 | while read FIRST REST

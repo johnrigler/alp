@@ -1,12 +1,13 @@
+::() { :; }
 a.F () 
 { 
-    __T=a.F;
+    local __T=a.F;
     : : List all function names;
     declare -F $1
 }
 a.S () 
 { 
-    __T=a.S;
+    local __T=a.S;
     : : renders a.sho in Octal;
     cksum | while read A B; do
         A=$(echo "obase=8; $A" | bc | a.sho);
@@ -16,13 +17,13 @@ a.S ()
 }
 a.Sh () 
 { 
-    __T=a.Sh;
+    local __T=a.Sh;
     : : Creates ALP file variant for a.S;
     a.f $1 > $1-$(a.f $1 | a.S | cut -c 1-7)
 }
 a.c () 
 { 
-    __T=a.c;
+    local __T=a.c;
     : : color Changed the color in the shell or web version;
     : color Possible colors are white,bold,underline,error,red,green,yellow,blue,purple,aqua;
     if [ -n $1 ]; then
@@ -63,19 +64,19 @@ a.c ()
 }
 a.dir () 
 { 
-    __T=a.dir;
+    local __T=a.dir;
     : : Change to ALP Home directory;
-    cd $_ALP_DIR/$1
+    cd $_A_DIR/$1
 }
-a.e () 
+a.env () 
 { 
-    __T=a.e;
-    : : Shows _ALP Environment Variables;
-    env | grep '_ALP'
+    local __T=a.env;
+    : : Shows _A_ Environment Variables;
+    env | grep '_A_'
 }
 a.f () 
 { 
-    __T=a.f;
+    local __T=a.f;
     : : Shows Specified ALP Function, takes one argument;
     declare -f $1
 }
@@ -97,7 +98,7 @@ a.fs ()
 }
 a.h () 
 { 
-    __T=a.h;
+    local __T=a.h;
     : : Transforms the last command into a function;
     function - () 
     { 
@@ -119,7 +120,7 @@ a.h ()
 }
 a.help () 
 { 
-    __T=a.help;
+    local __T=a.help;
     : : Help Facility;
     a.l | while read CMD; do
         HELP=$(a.f $CMD | grep "^    : :");
@@ -128,37 +129,50 @@ a.help ()
 }
 a.l () 
 { 
-    __T=a.l;
+    local __T=a.l;
     : : List all base ALP functions;
     a.F | grep "declare -f a." | cut -c 12-
 }
 a.make () 
 { 
-    __T=a.make;
+    local __T=a.make;
     : : Returns all ALP functions;
+    echo "::() { :; }";
     a.F | grep "declare -f a." | cut -c 12- | while read CMD; do
         a.f $CMD;
     done
 }
 a.mkmod () 
 { 
-    __T=a.mkmod;
+    local __T=a.mkmod;
     : : Create ALP Module, takes two variables: DIR PRE;
-    export _ALP_MODULE="$1";
-    export _ALP_MODULE_PRE="$2";
-    mkdir -p $_ALP_MODULE 2> /dev/null;
-    touch $_ALP_MODULE/alp.bash;
+    export _A_MODULE="$1";
+    export _A_MODULE_PRE="$2";
+    mkdir -p $_A_MODULE 2> /dev/null;
+    touch $_A_MODULE/alp.bash;
     source alp.bash
 }
 a.mod () 
 { 
-    __T=a.mod;
+    local __T=a.mod;
     : : Set ALP Module, takes one variable;
-    export _ALP_MODULE="$1"
+    export _A_MODULE="$1";
+    source $_A_MODULE/alp.bash;
+    function _a.mod () 
+    { 
+        NAME="$_A_MODULE_PRE".a.$1;
+        declare -f a.$1;
+        echo "$NAME () { __T=$NAME; :: $2 ; $3; }" > $$;
+        source $$;
+        rm $$
+    };
+    _a.mod dir "Change to module home directory" "cd $_A_MODULE/"'$1';
+    CMD="declare -F | grep 'declare -f $_A_MODULE_PRE.' | cut -c 12-";
+    _a.mod l "List module functions" "$CMD"
 }
 a.s () 
 { 
-    __T=a.s;
+    local __T=a.s;
     : : Creates a CRC Sum extension;
     sum | while read A B; do
         echo $A.$B;
@@ -166,7 +180,7 @@ a.s ()
 }
 a.sho () 
 { 
-    __T=a.sho;
+    local __T=a.sho;
     : : Creates Shoctal numbers;
     while read LINE; do
         echo $LINE | sed 's/7/9/g' | sed 's/6/8/g' | sed 's/5/7/g' | sed 's/4/6/g' | sed 's/3/5/g' | sed 's/2/4/g' | sed 's/1/3/g' | sed 's/0/2/g';
@@ -174,22 +188,25 @@ a.sho ()
 }
 a.v () 
 { 
-    __T=a.v;
+    local __T=a.v;
     : : vi specified function or ALP_TARGET;
-    a.f $1 > $$;
-    _ALP_TARGET=$$;
-    if [ $_ALP_TARGET ]; then
-        vi $_ALP_TARGET;
-        . $_ALP_TARGET;
+    echo "$1 ()" > $$;
+    echo "{" >> $$;
+    echo "    local __T=$1;" >> $$;
+    a.f $1 | grep -v "^    local __T=" | tail +3 >> $$;
+    _A_TARGET=$$;
+    if [ $_A_TARGET ]; then
+        vi $_A_TARGET;
+        . $_A_TARGET;
         rm $$;
     else
-        vi $_ALP_SRC;
-        . $_ALP_SRC;
+        vi $_A_SRC;
+        . $_A_SRC;
     fi
 }
 a.vb () 
 { 
-    __T=a.vb;
+    local __T=a.vb;
     : : vi bashrc;
     vi ~/.bashrc;
     . ~/.bashrc

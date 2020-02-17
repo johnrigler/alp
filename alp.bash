@@ -1,4 +1,3 @@
-::() { :; }
 a.F () 
 { 
     local __T=a.F;
@@ -68,6 +67,17 @@ a.dir ()
     : : Change to ALP Home directory;
     cd $_A_DIR/$1
 }
+a.div () 
+{ 
+    local __T=a.div;
+    : : Creates a simple DIV wrapper for HTML;
+    function - () 
+    { 
+        echo "$*"
+    };
+    - '<div>';
+    - '</div>'
+}
 a.env () 
 { 
     local __T=a.env;
@@ -103,12 +113,13 @@ a.h ()
     function - () 
     { 
         echo "$1 () {";
-        echo "$*" | while read FIRST SEC REST; do
-            echo $REST;
+        shift;
+        history 2 | head -1 | while read T T T REST; do
+            echo "$REST";
         done;
         echo "}"
     };
-    - $1 $(history | tail -2 | head -1) > $$;
+    - $1 > $$;
     . $$;
     a.f $1;
     rm $$;
@@ -170,6 +181,23 @@ a.mod ()
     CMD="declare -F | grep 'declare -f $_A_MODULE_PRE.' | cut -c 12-";
     _a.mod l "List module functions" "$CMD"
 }
+a.pre () 
+{ 
+    local __T=a.div.pre;
+    : : Creates DIV PRE set of wrappers, executes ARG1;
+    function - () 
+    { 
+        echo "$*"
+    };
+    - '<div>';
+    - '  <pre>';
+    : draw commandline reference;
+    echo "> $1";
+    : execute command;
+    $1;
+    - '  </pre>';
+    - '</div>'
+}
 a.s () 
 { 
     local __T=a.s;
@@ -188,26 +216,16 @@ a.sho ()
 }
 a.v () 
 { 
-    local __T=a.v;
-    : : vi specified function or ALP_TARGET;
-    echo "$1 ()" > $$;
-    echo "{" >> $$;
-    echo "    local __T=$1;" >> $$;
-    a.f $1 | grep -v "^    local __T=" | tail +3 >> $$;
-    _A_TARGET=$$;
-    if [ $_A_TARGET ]; then
-        vi $_A_TARGET;
-        . $_A_TARGET;
-        rm $$;
-    else
-        vi $_A_SRC;
-        . $_A_SRC;
-    fi
+    local __T='a.v';
+    : : involk vi;
+    declare -f $1 > $$.vi;
+    vim $$.vi;
+    . $$.vi
 }
 a.vb () 
 { 
     local __T=a.vb;
     : : vi bashrc;
-    vi ~/.bashrc;
+    vim ~/.bashrc;
     . ~/.bashrc
 }

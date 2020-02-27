@@ -229,3 +229,12 @@ a.vb ()
     vim ~/.bashrc;
     . ~/.bashrc
 }
+a.sbdir () 
+{ 
+    mkdir $1;
+    cd $1;
+    ln -s ../index.php;
+    ln -s ../style.css;
+    cd ..;
+    chmod g-w $1
+}

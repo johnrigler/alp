@@ -214,14 +214,6 @@ a.sho ()
         echo $LINE | sed 's/7/9/g' | sed 's/6/8/g' | sed 's/5/7/g' | sed 's/4/6/g' | sed 's/3/5/g' | sed 's/2/4/g' | sed 's/1/3/g' | sed 's/0/2/g';
     done
 }
-a.v () 
-{ 
-    local __T='a.v';
-    : : involk vi;
-    declare -f $1 > $$.vi;
-    vim $$.vi;
-    . $$.vi
-}
 a.vb () 
 { 
     local __T=a.vb;
@@ -231,10 +223,20 @@ a.vb ()
 }
 a.sbdir () 
 { 
+    : : Create an initial sbshell structure;
     mkdir $1;
     cd $1;
     ln -s ../index.php;
     ln -s ../style.css;
     cd ..;
     chmod g-w $1
+}
+a.v () 
+{ 
+    local __T='a.v';
+    : : invoke vi;
+    declare -f $1 > $$.vi;
+    vim $$.vi;
+    . $$.vi;
+    rm $$.vi
 }

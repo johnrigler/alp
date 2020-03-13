@@ -241,3 +241,9 @@ a.v ()
     . $$.vi;
     rm $$.vi
 }
+a.un () 
+{ 
+    T=$1;
+    shift;
+    python3 ~/unspendable/unspendable.py $T "$*"
+}

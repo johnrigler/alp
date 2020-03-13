@@ -223,6 +223,7 @@ a.vb ()
 }
 a.sbdir () 
 { 
+    local __T='a.sbdir';
     : : Create an initial sbshell structure;
     mkdir $1;
     cd $1;

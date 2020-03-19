@@ -1,0 +1,12 @@
+a.make () 
+{ 
+    local __T='a.make';
+    : : Build new ALP file.;
+    _FILE="alp.bash";
+    a.dir;
+    echo "::() { :; }" > $_FILE;
+    a.l | while read CMD; do
+        a.f $CMD;
+    done >> $_FILE;
+    a.back
+}

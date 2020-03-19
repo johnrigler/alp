@@ -173,21 +173,32 @@ a.make ()
 { 
     local __T='a.make';
     : : Build new ALP file.;
+    _FILE="alp.bash";
     a.dir;
-    echo "::() { :; }";
+    echo "::() { :; }" > $_FILE;
     a.l | while read CMD; do
         a.f $CMD;
-    done
+    done >> $_FILE;
+    a.back
 }
 a.mkmod () 
 { 
     local __T=a.mkmod;
     : : Create ALP Module, takes two variables: DIR PRE;
-    export _A_MODULE="$1";
-    export _A_MODULE_PRE="$2";
-    mkdir -p $_A_MODULE 2> /dev/null;
-    touch $_A_MODULE/alp.bash;
-    source alp.bash
+    export _ALP_MODULE="$1";
+    a.dir;
+    source $_ALP_MODULE.bash;
+    function _a.mkmod () 
+    { 
+        NAME="$_ALP_MODULE".a.$1;
+        declare -f a.$1;
+        echo "$NAME () { __T=$NAME; :: $2 ; $3; }" > $$;
+        source $$;
+        rm $$
+    };
+    _a.mkmod dir "Change to module home directory" "cd $_A_MODULE/"'$1';
+    CMD="declare -F | grep 'declare -f $_A_MODULE_PRE.' | cut -c 12-";
+    _a.mkmod l "List module functions" "$CMD"
 }
 a.mod () 
 { 
@@ -275,6 +286,7 @@ a.v ()
         _T=$(a.fs $1);
         vim $_T;
         . $_T;
+        rm $_T;
         cd $_WD;
     fi
 }

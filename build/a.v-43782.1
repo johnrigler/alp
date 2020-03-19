@@ -1,0 +1,22 @@
+a.v () 
+{ 
+    local __T='a.v';
+    _T=$1;
+    if [[ ! -n $_T ]]; then
+        : no parms given, assume base file;
+        _T=$_ALP_DIR/alp.bash;
+        vim $_T;
+        . $_T;
+        rm $_T;
+    else
+        : single function repl;
+        _T=$_ALP_DIR/$1.$$;
+        _WD=$(pwd);
+        a.dir;
+        _T=$(a.fs $1);
+        vim $_T;
+        . $_T;
+        rm $_T;
+        cd $_WD;
+    fi
+}

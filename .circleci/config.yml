@@ -6,5 +6,9 @@ jobs:
     steps:
       - checkout
       - run:
-          name: run ALP tests 
-          command: pwd 
+          name: Print Directory 
+          command: pwd
+      - run:
+          name: Show contents
+          command: ls 
+

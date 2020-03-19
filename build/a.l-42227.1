@@ -1,0 +1,6 @@
+a.l () 
+{ 
+    local __T=a.l;
+    : : List all base ALP functions;
+    a.F | grep "declare -f a." | cut -c 12-
+}

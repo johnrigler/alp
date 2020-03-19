@@ -1,0 +1,10 @@
+a.mkmod () 
+{ 
+    local __T=a.mkmod;
+    : : Create ALP Module, takes two variables: DIR PRE;
+    export _A_MODULE="$1";
+    export _A_MODULE_PRE="$2";
+    mkdir -p $_A_MODULE 2> /dev/null;
+    touch $_A_MODULE/alp.bash;
+    source alp.bash
+}

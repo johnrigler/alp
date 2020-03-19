@@ -1,0 +1,18 @@
+a.mod () 
+{ 
+    local __T=a.mod;
+    : : Set ALP Module, takes one variable;
+    export _A_MODULE="$1";
+    source $_A_MODULE/alp.bash;
+    function _a.mod () 
+    { 
+        NAME="$_A_MODULE_PRE".a.$1;
+        declare -f a.$1;
+        echo "$NAME () { __T=$NAME; :: $2 ; $3; }" > $$;
+        source $$;
+        rm $$
+    };
+    _a.mod dir "Change to module home directory" "cd $_A_MODULE/"'$1';
+    CMD="declare -F | grep 'declare -f $_A_MODULE_PRE.' | cut -c 12-";
+    _a.mod l "List module functions" "$CMD"
+}

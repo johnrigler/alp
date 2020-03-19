@@ -1,0 +1,10 @@
+a.build () 
+{ 
+    _WD=$(pwd);
+    a.dir;
+    cd build;
+    a.l | while read FUNCTION; do
+        a.fs $FUNCTION;
+    done;
+    cd $_WD
+}

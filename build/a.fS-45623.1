@@ -1,0 +1,8 @@
+a.fS () 
+{ 
+    __T=a.fS;
+    : : Creates ALP file for a.S variant;
+    _FS=$(echo $1 $(a.f $1 | a.S) | sed 's/ /-/');
+    a.f $1 > $_FS;
+    echo $_FS
+}

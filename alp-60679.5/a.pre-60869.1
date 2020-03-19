@@ -1,0 +1,13 @@
+a.pre () 
+{ 
+    : YYYY/MMWw;
+    T=$(a.dte);
+    mkdir -p ~/$1/$T;
+    : Create a script file with date stamp;
+    WD=$(pwd);
+    : Move into Directory;
+    cd ~/$1/$T;
+    script $(a.tme);
+    pwd;
+    cd $WD
+}

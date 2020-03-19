@@ -1,4 +1,10 @@
 ::() { :; }
+alp () 
+{ 
+    export _ALP_DIR="$1";
+    export _ALP_MOD="$2";
+    . $_ALP_DIR/$_ALP_MOD.bash
+}
 a.F () 
 { 
     local __T=a.F;
@@ -176,6 +182,7 @@ a.make ()
     _FILE="alp.bash";
     a.dir;
     echo "::() { :; }" > $_FILE;
+    a.f alp >> $_FILE;
     a.l | while read CMD; do
         a.f $CMD;
     done >> $_FILE;
@@ -204,8 +211,8 @@ a.mod ()
 { 
     local __T=a.mod;
     : : Set ALP Module, takes one variable;
-    export _A_MODULE="$1";
-    source $_A_MODULE/alp.bash;
+    export _ALP_MODULE="$1";
+    source $_ALP_MODULE/alp.bash;
     function _a.mod () 
     { 
         NAME="$_A_MODULE_PRE".a.$1;
@@ -274,7 +281,7 @@ a.v ()
     _T=$1;
     if [[ ! -n $_T ]]; then
         : no parms given, assume base file;
-        _T=$_ALP_DIR/alp.bash;
+        _T=$_ALP_DIR/_ALP_MODULE.bash;
         vim $_T;
         . $_T;
         rm $_T;
@@ -296,4 +303,10 @@ a.vb ()
     : : vi bashrc;
     vim ~/.bashrc;
     . ~/.bashrc
+}
+alp () 
+{ 
+    export _ALP_DIR="$1";
+    export _ALP_MOD="$2";
+    . $_ALP_DIR/$_ALP_MOD.bash
 }

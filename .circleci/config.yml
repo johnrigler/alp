@@ -13,7 +13,7 @@ jobs:
           command: ls
       - run:
           name:  Show Env
-          command: env 
+          command: . $HOME/project/alp.bash 
       - run:
           name: First Alp Command
           command: a.l

@@ -10,5 +10,10 @@ jobs:
           command: pwd
       - run:
           name: Show contents
-          command: ls 
-
+          command: ls
+      - run:
+          name:  Show Env
+          command: env 
+      - run:
+          name: First Alp Command
+          command: a.l

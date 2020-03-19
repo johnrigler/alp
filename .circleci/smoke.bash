@@ -2,4 +2,4 @@
 
 echo $HOME
 . $HOME/project/alp.bash 
-a.l
+a.env

@@ -281,7 +281,7 @@ a.v ()
     _T=$1;
     if [[ ! -n $_T ]]; then
         : no parms given, assume base file;
-        _T=$_ALP_DIR/_ALP_MODULE.bash;
+        _T=$_ALP_DIR/$_ALP_MOD.bash;
         vim $_T;
         . $_T;
         rm $_T;

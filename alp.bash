@@ -1,25 +1,3 @@
-a.F () 
-{ 
-    local __T=a.F;
-    : : List all function names;
-    declare -F $1
-}
-a.S () 
-{ 
-    local __T=a.S;
-    : : renders a.sho in Octal;
-    cksum | while read A B; do
-        A=$(echo "obase=8; $A" | bc | a.sho);
-        B=$(echo "obase=8; $B" | bc | a.sho);
-        echo $A.$B;
-    done
-}
-a.Sh () 
-{ 
-    local __T=a.Sh;
-    : : Creates ALP file variant for a.S;
-    a.f $1 > $1-$(a.f $1 | a.S | cut -c 1-7)
-}
 a.c () 
 { 
     local __T=a.c;
@@ -65,7 +43,7 @@ a.dir ()
 { 
     local __T=a.dir;
     : : Change to ALP Home directory;
-    cd $_A_DIR/$1
+    cd $_ALP_DIR/$1
 }
 a.div () 
 { 
@@ -77,6 +55,10 @@ a.div ()
     };
     - '<div>';
     - '</div>'
+}
+a.dte () 
+{ 
+    date "+%Y/%W%w"
 }
 a.env () 
 { 
@@ -90,19 +72,25 @@ a.f ()
     : : Shows Specified ALP Function, takes one argument;
     declare -f $1
 }
-a.fS () 
+a.F () 
 { 
-    __T=a.fS;
-    : : Creates ALP file for a.S variant;
-    _FS=$(echo $1 $(a.f $1 | a.S) | sed 's/ /-/');
-    a.f $1 > $_FS;
-    echo $_FS
+    local __T=a.F;
+    : : List all function names;
+    declare -F $1
 }
 a.fs () 
 { 
     __T=a.fs;
     : : Creates a CRC Checksum ALP file in the local directory;
     _FS=$(echo $1 $(a.f $1 | a.s) | sed 's/ /-/');
+    a.f $1 > $_FS;
+    echo $_FS
+}
+a.fS () 
+{ 
+    __T=a.fS;
+    : : Creates ALP file for a.S variant;
+    _FS=$(echo $1 $(a.f $1 | a.S) | sed 's/ /-/');
     a.f $1 > $_FS;
     echo $_FS
 }
@@ -183,20 +171,16 @@ a.mod ()
 }
 a.pre () 
 { 
-    local __T=a.div.pre;
-    : : Creates DIV PRE set of wrappers, executes ARG1;
-    function - () 
-    { 
-        echo "$*"
-    };
-    - '<div>';
-    - '  <pre>';
-    : draw commandline reference;
-    echo "> $1";
-    : execute command;
-    $1;
-    - '  </pre>';
-    - '</div>'
+    : YYYY/MMWw;
+    T=$(a.dte);
+    mkdir -p ~/$1/$T;
+    : Create a script file with date stamp;
+    WD=$(pwd);
+    : Move into Directory;
+    cd ~/$1/$T;
+    script $(a.tme);
+    pwd;
+    cd $WD
 }
 a.s () 
 { 
@@ -206,20 +190,15 @@ a.s ()
         echo $A.$B;
     done
 }
-a.sho () 
+a.S () 
 { 
-    local __T=a.sho;
-    : : Creates Shoctal numbers;
-    while read LINE; do
-        echo $LINE | sed 's/7/9/g' | sed 's/6/8/g' | sed 's/5/7/g' | sed 's/4/6/g' | sed 's/3/5/g' | sed 's/2/4/g' | sed 's/1/3/g' | sed 's/0/2/g';
+    local __T=a.S;
+    : : renders a.sho in Octal;
+    cksum | while read A B; do
+        A=$(echo "obase=8; $A" | bc | a.sho);
+        B=$(echo "obase=8; $B" | bc | a.sho);
+        echo $A.$B;
     done
-}
-a.vb () 
-{ 
-    local __T=a.vb;
-    : : vi bashrc;
-    vim ~/.bashrc;
-    . ~/.bashrc
 }
 a.sbdir () 
 { 
@@ -232,12 +211,55 @@ a.sbdir ()
     cd ..;
     chmod g-w $1
 }
+a.Sh () 
+{ 
+    local __T=a.Sh;
+    : : Creates ALP file variant for a.S;
+    a.f $1 > $1-$(a.f $1 | a.S | cut -c 1-7)
+}
+a.sho () 
+{ 
+    local __T=a.sho;
+    : : Creates Shoctal numbers;
+    while read LINE; do
+        echo $LINE | sed 's/7/9/g' | sed 's/6/8/g' | sed 's/5/7/g' | sed 's/4/6/g' | sed 's/3/5/g' | sed 's/2/4/g' | sed 's/1/3/g' | sed 's/0/2/g';
+    done
+}
+a.tme () 
+{ 
+    date "+%H%M"
+}
+a.un () 
+{ 
+    T=$1;
+    shift;
+    ~/unspendable/unspendable.py $T "$*"
+}
 a.v () 
 { 
     local __T='a.v';
-    : : invoke vi;
-    declare -f $1 > $$.vi;
-    vim $$.vi;
-    . $$.vi;
-    rm $$.vi
+    _T=$1;
+    if [[ ! -n $_T ]]; then
+        : no parms given, assume base file;
+        _T=$_ALP_DIR/alp.bash;
+        vim $_T;
+        . _$T;
+        rm _$T;
+    else
+        : single function repl;
+        _T=$_ALP_DIR/$1.$$;
+        _WD=$(pwd);
+        a.dir;
+        _T=$(a.fs $1);
+        vim $_T;
+        . $_T;
+        cd $_WD;
+    fi
+}
+a.vb () 
+{ 
+    local __T=a.vb;
+    : : vi bashrc;
+    vim ~/.bashrc;
+    . ~/.bashrc
 }

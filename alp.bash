@@ -263,3 +263,9 @@ a.vb ()
     vim ~/.bashrc;
     . ~/.bashrc
 }
+a.un () 
+{ 
+    T=$1;
+    shift;
+    python3 ~/unspendable/unspendable.py $T "$*"
+}

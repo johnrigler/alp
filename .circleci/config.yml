@@ -6,14 +6,5 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Print Directory 
-          command: pwd
-      - run:
-          name: Show contents
-          command: ls
-      - run:
-          name:  Show Env
-          command: . $HOME/project/alp.bash 
-      - run:
-          name: First Alp Command
-          command: a.l
+          name:  First Smoke Test 
+          command: $HOME/project/smoke.bash 

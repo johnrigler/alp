@@ -1,9 +1,0 @@
-a.make () 
-{ 
-    local __T=a.make;
-    : : Returns all ALP functions;
-    echo "::() { :; }";
-    a.F | grep "declare -f a." | cut -c 12- | while read CMD; do
-        a.f $CMD;
-    done
-}

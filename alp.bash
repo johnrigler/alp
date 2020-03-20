@@ -211,19 +211,23 @@ a.mod ()
 { 
     local __T=a.mod;
     : : Set ALP Module, takes one variable;
-    export _ALP_MODULE="$1";
-    source $_ALP_MODULE/alp.bash;
-    function _a.mod () 
-    { 
-        NAME="$_A_MODULE_PRE".a.$1;
-        declare -f a.$1;
-        echo "$NAME () { __T=$NAME; :: $2 ; $3; }" > $$;
-        source $$;
-        rm $$
-    };
-    _a.mod dir "Change to module home directory" "cd $_A_MODULE/"'$1';
-    CMD="declare -F | grep 'declare -f $_A_MODULE_PRE.' | cut -c 12-";
-    _a.mod l "List module functions" "$CMD"
+    export _ALP_MOD="$1";
+    if [[ $_ALP_MOD != 'alp' ]]; then
+        _FILE=$_ALP_DIR/$_ALP_MOD.bash;
+        touch $_FILE;
+        source $_FILE;
+        function _a.mod () 
+        { 
+            NAME="$1.$2";
+            echo $NAME;
+            echo "$NAME () { __T=$NAME; :: $3 ; $4; }" > $$;
+            source $$;
+            rm $$;
+            declare -f $NAME
+        };
+        CMD="declare -F | grep 'declare -f $_ALP_MOD' | cut -c 12-";
+        _a.mod $_ALP_MOD l "List module functions" "$CMD";
+    fi
 }
 a.pre () 
 { 

@@ -1,4 +1,0 @@
-un() {
-	: unspendable functions
-}
-

@@ -1,6 +1,5 @@
 #!/bin/bash
 
-echo $HOME
-find .
 . $HOME/project/alp.bash 
-a.help
+alp $HOME/project/alp alp
+a.env

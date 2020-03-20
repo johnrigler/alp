@@ -273,12 +273,6 @@ a.tme ()
 { 
     date "+%H%M"
 }
-a.un () 
-{ 
-    T=$1;
-    shift;
-    python3 ~/unspendable/unspendable.py $T "$*"
-}
 a.v () 
 { 
     local __T='a.v';

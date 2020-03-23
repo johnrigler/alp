@@ -88,7 +88,7 @@ a.dir ()
     local __T=a.dir;
     : : Change to ALP Home directory;
     export _WD=$(pwd);
-    cd $_ALP_DIR/$1;
+    cd $_ALP_DIR;
     function a.back () 
     { 
         cd $_WD

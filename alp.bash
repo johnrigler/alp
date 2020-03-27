@@ -308,3 +308,15 @@ alp ()
     export _ALP_MOD="$2";
     . $_ALP_DIR/$_ALP_MOD.bash
 }
+a.date.w () 
+{ 
+    date "+%w"
+}
+a.date.W () 
+{ 
+    date "+%W"
+}
+a.date.yyyy () 
+{ 
+    date "+%Y"
+}

@@ -137,29 +137,6 @@ a.fs ()
     a.f $1 > $_FS;
     echo $_FS
 }
-a.h () 
-{ 
-    local __T=a.h;
-    : : Transforms the last command into a function;
-    function - () 
-    { 
-        echo "$1 () {";
-        shift;
-        history 2 | head -1 | while read T T T REST; do
-            echo "$REST";
-        done;
-        echo "}"
-    };
-    - $1 > $$;
-    . $$;
-    a.f $1;
-    rm $$;
-    : - "$1 () { $_T ; }";
-    function - () 
-    { 
-        :
-    }
-}
 a.help () 
 { 
     local __T=a.help;
@@ -319,4 +296,22 @@ a.date.W ()
 a.date.yyyy () 
 { 
     date "+%Y"
+}
+
+a.h () 
+{ 
+    local __T=a.h;
+    : : Transforms the last command into a function;
+    _T=$(history 2 | head -1);
+    _CMD=$(echo "$_T" | while read FIRST REST; do
+        echo $REST;
+    done);
+    eval $1 '() {' $_CMD'; }'
+}
+a.date () 
+{ 
+    local X=$(a.date.yyyy);
+    local Y=$(a.date.W)$(a.date.w);
+    mkdir "$HOME/$X/$Y/";
+    ln -fs $HOME/$X/$Y $HOME/$X/today
 }

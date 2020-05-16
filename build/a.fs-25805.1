@@ -1,8 +1,0 @@
-a.fs () 
-{ 
-    __T=a.fs;
-    : : Creates a CRC Checksum ALP file in the local directory;
-    _FS=$(echo $1 $(a.f $1 | a.s) | sed 's/ /-/');
-    a.f $1 > $_FS;
-    echo $_FS
-}

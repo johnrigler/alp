@@ -250,28 +250,6 @@ a.tme ()
 { 
     date "+%H%M"
 }
-a.v () 
-{ 
-    local __T='a.v';
-    _T=$1;
-    if [[ ! -n $_T ]]; then
-        : no parms given, assume base file;
-        _T=$_ALP_DIR/$_ALP_MOD.bash;
-        vim $_T;
-        . $_T;
-        rm $_T;
-    else
-        : single function repl;
-        _T=$_ALP_DIR/$1.$$;
-        _WD=$(pwd);
-        a.dir;
-        _T=$(a.fs $1);
-        vim $_T;
-        . $_T;
-        rm $_T;
-        cd $_WD;
-    fi
-}
 a.vb () 
 { 
     local __T=a.vb;
@@ -312,6 +290,37 @@ a.date ()
 { 
     local X=$(a.date.yyyy);
     local Y=$(a.date.W)$(a.date.w);
-    mkdir "$HOME/$X/$Y/";
+    mkdir "$HOME/$X/$Y/" 2> /dev/null;
+    rm $HOME/$X/today;
     ln -fs $HOME/$X/$Y $HOME/$X/today
+}
+a.v () 
+{ 
+    local __T='a.v';
+    _T=$1;
+    if [[ ! -n $_T ]]; then
+        : no parms given, assume base file;
+        _T=$_ALP_DIR/$_ALP_MOD.bash;
+        vim $_T;
+        . $_T;
+        rm $_T;
+    else
+        : single function repl;
+        : _T=$_ALP_DIR/$1.$$;
+        _WD=$(pwd);
+        a.dir;
+        : _T=$(a.fs $1);
+        _T=$$.bash;
+        a.f $1 > $_T;
+        vim $_T;
+        . $_T;
+        rm $_T;
+        cd $_WD;
+    fi
+}
+a.e () 
+{ 
+    : B='$'"$1";
+    : eval echo "$1=$(echo $B)";
+    eval echo "$1=$(echo '$'$1)"
 }

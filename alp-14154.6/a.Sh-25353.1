@@ -1,6 +1,0 @@
-a.Sh () 
-{ 
-    local __T=a.Sh;
-    : : Creates ALP file variant for a.S;
-    a.f $1 > $1-$(a.f $1 | a.S | cut -c 1-7)
-}

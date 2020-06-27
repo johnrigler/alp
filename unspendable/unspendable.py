@@ -178,12 +178,11 @@ if __name__ == '__main__':
        if c == '0':
           list[cnt] = 'o'
 
+       if c == "'":
+          list[cnt] = 'y'
+
        cnt=cnt+1
 
-    # DCx is hard-coded in next steps
-    # are to fix this to support
-    # other code sets such as
-    # for Dogecoin: 9s - 9z and the A ranges
 
     name = ''.join(list)
     print(generate(prefix_string, name))

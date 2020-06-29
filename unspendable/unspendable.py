@@ -178,6 +178,9 @@ if __name__ == '__main__':
        if c == '0':
           list[cnt] = 'o'
 
+       if c == 'O':
+          list[cnt] = 'o'
+
        if c == "'":
           list[cnt] = 'y'
 

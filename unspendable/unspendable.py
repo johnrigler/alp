@@ -6,7 +6,7 @@ import binascii
 
 dhash = lambda x: hashlib.sha256(hashlib.sha256(x).digest()).digest()
 b58_digits = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
-b58_dcmap  = '123456789abcdefghjklmnpqrstuvwxyz!)$(=/\.i;?"_o}{@+|*,: -~'
+b58_dcmap  = '123456789abcdefghjklmnpqrstuvwxyz!)0(=/\.i;?"_o}{@+|*,: -~'
 b58_sft    = '         ABCDEFGHJLKMNPQRSTUVWXYZ < >    I    O][         '
 
 # b58_dcmap is the dimecash mapping
@@ -174,9 +174,6 @@ if __name__ == '__main__':
           list[cnt] = b58_digits[x]
        if c == 'I':
           list[cnt] = 'i'
-
-       if c == '0':
-          list[cnt] = 'o'
 
        if c == 'O':
           list[cnt] = 'o'

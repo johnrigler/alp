@@ -24,10 +24,6 @@ a.Sh ()
     : : Creates ALP file variant for a.S;
     a.f $1 > $1-$(a.f $1 | a.S | cut -c 1-7)
 }
-a.back () 
-{ 
-    cd $_WD
-}
 a.build () 
 { 
     _WD=$(pwd);
@@ -110,17 +106,6 @@ a.dir ()
     { 
         cd $_WD
     }
-}
-a.div () 
-{ 
-    local __T=a.div;
-    : : Creates a simple DIV wrapper for HTML;
-    function - () 
-    { 
-        echo "$*"
-    };
-    - '<div>';
-    - '</div>'
 }
 a.dte () 
 { 
@@ -309,7 +294,7 @@ a.v ()
     _T=$1;
     if [[ ! -n $_T ]]; then
         : no parms given, assume base file;
-        _T=$_ALP_DIR/$_ALP_MOD.bash;
+        _T=$_ALP_/$_ALP_MOD.bash;
         vim $_T;
         . $_T;
         rm $_T;
@@ -317,7 +302,7 @@ a.v ()
         : single function repl;
         : _T=$1.$$;
         _WD=$(pwd);
-        a.dir;
+        : a.dir;
         : _T=$(a.fs $1);
         _T=$$.bash;
         a.f $1 > $_T;

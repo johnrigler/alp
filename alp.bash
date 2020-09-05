@@ -283,30 +283,6 @@ a.tme ()
 { 
     date "+%H%M"
 }
-a.v () 
-{ 
-    local __T='a.v';
-    _T=$1;
-    if [[ ! -n $_T ]]; then
-        : no parms given, assume base file;
-        _T=$_ALP_DIR/$_ALP_MOD.bash;
-        vim $_T;
-        . $_T;
-        rm $_T;
-    else
-        : single function repl;
-        : _T=$_ALP_DIR/$1.$$;
-        _WD=$(pwd);
-        a.dir;
-        : _T=$(a.fs $1);
-        _T=$$.bash;
-        a.f $1 > $_T;
-        vim $_T;
-        . $_T;
-        rm $_T;
-        cd $_WD;
-    fi
-}
 a.vb () 
 { 
     local __T=a.vb;
@@ -319,4 +295,35 @@ alp ()
     export _ALP_DIR="$1";
     export _ALP_MOD="$2";
     . $_ALP_DIR/$_ALP_MOD.bash
+}
+un () 
+{ 
+    local __T="un";
+    local _ARG1=$1;
+    shift;
+    python3 $_ALP_DIR/unspendable/unspendable.py $_ARG1 "$*"
+}
+a.v () 
+{ 
+    local __T='a.v';
+    _T=$1;
+    if [[ ! -n $_T ]]; then
+        : no parms given, assume base file;
+        _T=$_ALP_DIR/$_ALP_MOD.bash;
+        vim $_T;
+        . $_T;
+        rm $_T;
+    else
+        : single function repl;
+        : _T=$1.$$;
+        _WD=$(pwd);
+        a.dir;
+        : _T=$(a.fs $1);
+        _T=$$.bash;
+        a.f $1 > $_T;
+        vim $_T;
+        . $_T;
+        rm $_T;
+        cd $_WD;
+    fi
 }

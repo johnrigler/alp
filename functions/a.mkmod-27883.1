@@ -1,0 +1,19 @@
+a.mkmod () 
+{ 
+    __T=a.mkmod;
+    : : Create ALP Module, takes two variables: DIR PRE;
+    export _ALP_MODULE="$1";
+    a.dir;
+    source $_ALP_MODULE.bash;
+    function _a.mkmod () 
+    { 
+        NAME="$_ALP_MODULE".a.$1;
+        declare -f a.$1;
+        - "$NAME () { __T=$NAME; :: $2 ; $3; }" > $$;
+        source $$;
+        rm $$
+    };
+    _a.mkmod dir "Change to module home directory" "cd $_A_MODULE/"'$1';
+    CMD="declare -F | grep 'declare -f $_A_MODULE_PRE.' | cut -c 12-";
+    _a.mkmod l "List module functions" "$CMD"
+}

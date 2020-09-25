@@ -1,0 +1,12 @@
+dc.record () 
+{ 
+    dc.get.block-from.height $1 | grep '^    "' | grep -v ':' | cut -c 6-69 | while read TRANS; do
+        dogecoin-cli gettransaction "$TRANS" 2> /dev/null;
+    done | egrep 'amount|address' | grep "^     " | xargs -n4 | cut -c 10-43,53- | sed 's/-//g' | sed 's/,//g' | while read ADDR AMT; do
+        PRE=$(echo $ADDR | cut -c 1-2);
+        MESSAGE=$(echo $ADDR | cut -c 3-28);
+        MESSAGE=$(echo $MESSAGE | sed 's/x/ /g');
+        MESSAGE=$(echo $MESSAGE | sed 's/z/ /g' );
+        echo "$PRE $MESSAGE $AMT" | tr 'A-Z' 'a-z';
+    done
+}

@@ -1,0 +1,13 @@
+dc.ipfs.make () 
+{ 
+    AMT="0.00001";
+    FIRST=$(echo $2 | cut -c 1-23);
+    LAST=$(echo $2 | cut -c 24-);
+    echo "$1-cli sendmany \"\" \"{\\";
+    ONE=$(un DCx "$3");
+    TWO=$(un "DDx$FIRST");
+    THREE=$(un "DEx$LAST");
+    echo \\\"$ONE\\\"":$AMT,\\";
+    echo \\\"$TWO\\\"":$AMT,\\";
+    echo \\\"$THREE\\\"":$AMT}\""
+}

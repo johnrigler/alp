@@ -1,0 +1,6 @@
+a.l () 
+{ 
+    __T=a.l;
+    : : List all base ALP functions;
+    a.F | grep --color=auto "declare -f a." | cut -c 12-
+}

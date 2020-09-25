@@ -1,0 +1,11 @@
+dc.get.tx.seg () 
+{ 
+    TXID=$1;
+    BLKIX=$(dogecoin-cli gettransaction $TXID | grep "blockindex" | cut -c 17- | sed 's/,//g');
+    BLKTME=$(dogecoin-cli gettransaction $TXID | grep "blocktime" | cut -c 16- | sed 's/,//g');
+    dogecoin-cli gettransaction $TXID | egrep 'address|amount|vout' | tail +2 | while read A B; do
+        echo $B;
+    done | xargs -n3 | sed 's/,/ /g' | sed 's/-/ /g' | while read C D E; do
+        echo $BLKIX $BLKTME $E $C $D;
+    done
+}

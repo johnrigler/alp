@@ -1,0 +1,6 @@
+dc.setname () 
+{ 
+    SETFILE=$(dc.next)/100000*100000;
+    FULLNAME=$(echo $SETFILE | bc).txt;
+    echo $_DC_WEB/$1/$FULLNAME
+}

@@ -1,0 +1,5 @@
+dc.blockcopy () 
+{ 
+    cp $1 /var/www/html/bitcoin_blocks;
+    chown www-data /var/www/html/bitcoin_blocks/$1
+}

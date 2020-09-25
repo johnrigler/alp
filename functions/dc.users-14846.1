@@ -1,0 +1,12 @@
+dc.users () 
+{ 
+    echo "select user_login,user_email from wp_users" | mysql wordpress | grep -v user_login | while read USER EMAIL; do
+        echo $USER $EMAIL;
+        dogecoin-cli listaccounts | grep $USER > /dev/null;
+        if [[ $? -ne 0 ]]; then
+            dogecoin-cli move "DMF" "$USER" 5;
+            mkdir /var/www/WordPress/users/$USER 2> /dev/null;
+            chown www-data /var/www/WordPress/users/$USER;
+        fi;
+    done
+}

@@ -1,0 +1,4 @@
+db.getblockcount () 
+{ 
+    echo "select max(height) from block;" | mysql dimecash | tail -1
+}

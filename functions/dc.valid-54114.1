@@ -1,0 +1,4 @@
+dc.valid () 
+{ 
+    dc validateaddress $1 | grep address | cut -c 15-48
+}

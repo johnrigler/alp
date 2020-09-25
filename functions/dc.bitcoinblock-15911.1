@@ -1,0 +1,9 @@
+dc.bitcoinblock () 
+{ 
+    ls blk* | grep -v 1195 | while read A; do
+        B=$(cat $A | a.S);
+        C=$(un DCx "Bitcoin:$A");
+        echo $A $C $B;
+        ln -s $A $C.$B;
+    done
+}

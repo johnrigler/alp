@@ -1,0 +1,10 @@
+a.h () 
+{ 
+    __T=a.h;
+    : : Transforms the last command into a function;
+    _T=$(history 2 | head -1);
+    _CMD=$(- "$_T" | while read FIRST REST; do
+        - $REST;
+    done);
+    eval $1 '() {' $_CMD'; }'
+}

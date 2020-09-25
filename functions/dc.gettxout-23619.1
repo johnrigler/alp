@@ -1,0 +1,6 @@
+dc.gettxout () 
+{ 
+    txid=$1;
+    n=$2;
+    dc gettxout "$txid" $n include_mempool
+}

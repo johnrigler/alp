@@ -1,0 +1,27 @@
+dc.un () 
+{ 
+    function a.s () 
+    { 
+        sum | while read A B; do
+            echo $A;
+        done
+    };
+    unspendable.py "DCx" $1 > $$.temp;
+    a.f $1 | grep ":" | while read TRASH LINE; do
+        echo $LINE | grep ";" > /dev/null;
+        NOTLAST=$(echo $?);
+        NOSEMI=$(echo $LINE | sed 's/;//');
+        ( unspendable.py 9s "$NOSEMI";
+        echo $NOTLAST ) | xargs -n2;
+    done >> $$.temp;
+    SUM=$(cat $$.temp | a.s);
+    let FIRST=1;
+    cat $$.temp | while read LINE; do
+        if [[ $FIRST -eq 1 ]]; then
+            echo $LINE "0.000"$SUM;
+            let FIRST=0;
+        else
+            echo $LINE "0.0001";
+        fi;
+    done
+}

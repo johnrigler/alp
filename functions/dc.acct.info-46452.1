@@ -1,0 +1,10 @@
+dc.acct.info () 
+{ 
+    dogecoin-cli getaccountaddress "$1";
+    dogecoin-cli getbalance "$1";
+    dogecoin-cli getaddressesbyaccount "$1";
+    echo "getreceivedbyaccount";
+    dogecoin-cli getreceivedbyaccount "$1";
+    : echo "listunspent";
+    : dogecoin-cli listunspent
+}

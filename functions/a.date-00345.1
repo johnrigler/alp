@@ -1,0 +1,12 @@
+a.date () 
+{ 
+    : : Sets Home directory;
+    local _WD=$(pwd);
+    cd $HOME;
+    local _T="public_html/$(a.date.yyyy)";
+    ( mkdir -p $_T;
+    cd $_T;
+    rm today;
+    ln -s $(a.date.W)$(a.date.w) today ) 2> /dev/null;
+    cd $_WD
+}

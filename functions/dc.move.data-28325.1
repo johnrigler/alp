@@ -1,0 +1,12 @@
+dc.move.data () 
+{ 
+    WD=$(pwd);
+    cd /var/www/html/doge;
+    find . -type d | cut -c 3- | while read ANCHOR; do
+        rm $ANCHOR/data.txt;
+        grep $ANCHOR 2*.txt;
+    done | sed 's/:/ /g' | while read A B C D E; do
+        echo "$B $C $E" >> $D/data.txt;
+    done;
+    cd $WD
+}

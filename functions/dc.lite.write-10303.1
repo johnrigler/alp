@@ -1,0 +1,10 @@
+dc.lite.write () 
+{ 
+    read LINE;
+    echo 'litecoin-cli sendmany "" "{\';
+    echo '\"'$LINE'\":0.000'$1'\';
+    while read LINE; do
+        echo ',\"'$LINE'\":0.0001\';
+    done;
+    echo '}"'
+}

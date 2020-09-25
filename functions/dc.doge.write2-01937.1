@@ -1,0 +1,10 @@
+dc.doge.write2 () 
+{ 
+    read ADDR CODE;
+    echo 'dogecoin-cli sendmany "DMF" "{\';
+    echo '\"'$ADDR'\":0.0'$CODE'\';
+    while read ADDR CODE; do
+        echo ',\"'$ADDR'\":0.0'$CODE'\';
+    done;
+    echo '}"'
+}

@@ -1,0 +1,7 @@
+dc.devops.blocks () 
+{ 
+    ls ~/.dogecoin/blocks/blk* | while read BLK; do
+        echo $BLK;
+        cat $BLK | sum;
+    done | xargs -n3
+}

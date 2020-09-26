@@ -1,0 +1,12 @@
+dogecoin.process () 
+{ 
+    echo "dogecoin-cli sendmany \"$1\" \"{\\";
+    a.f dogecoin | grep ':' | while read TRASH ADDR REST; do
+        echo $REST | grep ';' > /dev/null;
+        if [ $? -eq 0 ]; then
+            echo "\\\"$ADDR\\\":$REST" | sed 's/;/,\\/';
+        else
+            echo "\\\"$ADDR\\\":$REST}\"";
+        fi;
+    done
+}

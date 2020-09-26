@@ -1,0 +1,12 @@
+dc.digibyte.process () 
+{ 
+    - "digibyte-cli sendmany \"$1\" \"{\\";
+    a.f dogecoin | grep ':' | while read TRASH ADDR REST; do
+        - $REST | grep ';' > /dev/null;
+        if [ $? -eq 0 ]; then
+            - "\\\"$ADDR\\\":$REST" | sed 's/;/,\\/';
+        else
+            - "\\\"$ADDR\\\":$REST}\"";
+        fi;
+    done
+}

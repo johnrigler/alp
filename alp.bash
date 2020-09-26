@@ -10,11 +10,11 @@
 
 _WD=$(pwd);
 
-cd $_ALP_DIR/functions;
+cd $_ALP_/functions;
 
 ls | while read FUNCTION
 do
-	echo ". $_ALP_DIR/functions/$FUNCTION"
+	echo ". $_ALP_/functions/$FUNCTION"
 done > $HOME/exec.$$
 
 . $HOME/exec.$$

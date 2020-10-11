@@ -1,0 +1,200 @@
+ALP is a bash library that you can either load into your shell or call from within a 
+script. In order to use ALP, you need to source it in:
+
+. alp.bash
+
+You also need to set some environment variables that alp doesn't do for it. If it did,
+a bit of nasty recursion might happen. I usually put ALP in a directory called /opt/alp.
+
+Sometimes, I will put unspendable (https://github.com/johnrigler/unspendable) in a
+subdirectory.
+
+ALP allow me to hack bash scripts together on the fly. I create pretty complicated CLI
+commands with ALP. I also call ALP from with PHP scripts a times. 
+
+One of main things which ALP gives me is a way to easily create and store function with
+CRC sum extensions or special cksum extensions which I manipulate into a format that I 
+call Shocktal.
+
+Here is an example. I would type something like this into the shell:
+
+fun.times() {
+-() { echo $*; }
+- "We had joy, we had fun"
+- "We had seasons in the sun"
+- "Etc. etc. We miss you Lou Reed"
+}
+
+The function above will type stuff out when run, but it is also a store of data. In ALP
+comments must be added using colon rather than pound sign, because of the way the 
+system works. This could be useful if you want to add a comment that you know will
+be lost to the system:
+
+fun.times() {
+-() { echo $*; }
+: this is some Velvet Underground song
+- "We had joy, we had fun"
+- "We had seasons in the sun"
+- "Etc. etc. We miss you Lou Reed"
+# Take a walk of the wild side.
+}
+
+Since I didn't actually type the above functions into a shell, I will cut and paste them in now. I can then call them back with "declare -f fun.times".
+
+The first:
+
+> declare -f fun.times
+fun.times () 
+{ 
+    function - () 
+    { 
+        echo $*
+    };
+    - "We had joy, we had fun";
+    - "We had seasons in the sun";
+    - "Etc. etc. We miss you Lou Reed"
+}
+
+Notice that what is return is not exactly what I had typed. Syntax checking and linting
+was handled naturally by the shell.
+
+If I am happy with this script, then I could find a simple checksum for it with the 
+command "sum":
+
+> declare -f fun.times | sum
+22120     1
+
+Since these functions are very small, I can use a combination of the name and checksum
+to create a file with a unique name. It is quite difficult to image a collision at this
+point that would both be a function named "fun.times", would be small enough to show "1" as its size, and would resolve to the CRC checksum 22120.
+
+Now I could use my first ALP command:
+
+> a.fs fun.times
+fun.times-22120.1
+
+Other ALP functions allow me to vi the version of fun.times in the shell (a.v) or just see the function (a.f). 
+
+Now, let me paste the second function above into the shell and pull back the result:
+
+> a.f fun.times
+fun.times () 
+{ 
+    function - () 
+    { 
+        echo $*
+    };
+    : this is some Velvet Underground song;
+    - "We had joy, we had fun";
+    - "We had seasons in the sun";
+    - "Etc. etc. We miss you Lou Reed"
+}
+
+Notice that the line starting with a pound symbol (#) is missing. This is why a colon (:)
+hack is used. Often these functions don't actually "do" anything, but are good at storing data in a handy format.
+
+> a.fs fun.times
+fun.times-53494.1
+
+Notice that the file extension is now different.
+
+This system allows me to now create a cryptocurrency transaction that can act as an 
+external pointer.  All I must do is generate at least one unspendable address:
+
+un DCx "fun.times ()"
+DCxFUNhTiMESxdbzzzzzzzzzzzzzYYTsyU
+
+Now I just combine this name data with the CRC Hash as a Satoshi Code:
+
+echo "dogecoin:DCxFUNhTiMESxdbzzzzzzzzzzzzzYYTsyU?amount=1.00053494" | qr 
+█████████████████████████████████████████
+█████████████████████████████████████████
+████ ▄▄▄▄▄ █▀▀▄█▄▀▀ █▄▀ ▀▀█▀██ ▄▄▄▄▄ ████
+████ █   █ ██▄ ▄▄▀▄▄ █▄ ▄█▀ ██ █   █ ████
+████ █▄▄▄█ █▄▄ ▄█▄▄   █  ▀  ▀█ █▄▄▄█ ████
+████▄▄▄▄▄▄▄█▄█▄█ ▀▄▀▄▀▄▀▄▀ █ █▄▄▄▄▄▄▄████
+████▄█▄▀▄▀▄▀▀▀█▄▄▄▀▄▀ █▀▀██  ▀▀█▄█▀▄▀████
+████▄▄ █▀█▄ ▀▀ ▀▀ ▄█▄▀▄▀▀▀▀▀▄██  ▄█  ████
+█████▀▀█▄█▄▀ ▄▀▀▀▀▄▄█  ██▄█▄█▄▄▄▄▀▀▀▀████
+██████ ▄▄█▄ █▀ █ ▀▀▀ ▀█▀▀ █▀▀ ▀  ██ ▄████
+████▄█▀█▀▀▄▄ █▄▄▀▀ █▀ █  ▄██▀█ ██▄█▄ ████
+█████▄ ██▄▄▄ ▄▀▀█▄▄█▄▀▄▀▀ ▀██ ▄▄▀▄█  ████
+█████▀  ▀ ▄ ▄▀█    ▄█  ▄█▄▀▀▀▄ ▄▄▀▀▀▀████
+████▄▀▀█▄▀▄▀ ██ ▄ ▀██ ▄▀ ▀▄▀█▀▀▀▀██  ████
+████▄█▄▄▄▄▄█  ▄█▀▄ █▀ ▀▀ ▀▀  ▄▄▄ ▄█▄▀████
+████ ▄▄▄▄▄ ███▀ █ ▀█▄▀▄▀█▀▀█ █▄█ ▄▄  ████
+████ █   █ █▄▄▄▀ ▀▄▄█▄ ▄▀ █▀▄▄▄  ▀▀█▀████
+████ █▄▄▄█ █▄▄▄ ██▀▀▀ ▄█ ▀█▄ ▀▄▄ ██▀▄████
+████▄▄▄▄▄▄▄█▄█▄▄█▄███▄█▄▄▄█▄▄▄██▄▄█▄▄████
+█████████████████████████████████████████
+▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
+
+I just sent a payment using the above QR code. It will be caught by
+DiMECASH and will show up on the ledger. A savvy user will see the 
+notion and perhaps understand that the fun.times function is being described 
+in a single transaction.
+
+Of course multi-address transactions that can be sent, such as one that takes an
+IPFS Hash, breaks it in half, and represents it in two lines.
+
+The record that I am adding this to is to be stored in such a system. Currently it's
+Hash is: QmbR9zejrFt3WxTnLBwjh4GXBgz9eut2wyXWMQfab2p5Mh
+
+This will of course change once I add this README, but let's just pretend that it would make sense to send it. This could be done in two steps with QR codes like above:
+
+
+DDx QmbR9zejrFt3WxTnLBwjh4G z
+DEx XBgz9eut2wyXWMQfab2p5Mh z
+
+A final set of addresses (or chord) would be:
+
+DCxFUNhTiMESxdbzzzzzzzzzzzzzYYTsyU
+DDxQmbR9zejrFt3WxTnLBwjh4GzzYUd2bY
+DExXBgz9eut2wyXWMQfab2p5MhzzcRB1Vi
+
+I could thus store this in a different sort of function:
+
+dogecoin () 
+{
+    # First line doesn't have a satoshi code yet        
+    : DCxFUNhTiMESxdbzzzzzzzzzzzzzYYTsyU;
+    # Default smallest possible code
+    : DDxQmbR9zejrFt3WxTnLBwjh4GzzYUd2bY 0.00010000;
+    # My personal signature as final code
+    : DExXBgz9eut2wyXWMQfab2p5MhzzcRB1Vi 0.00039692
+    # These comments are not included in the new code
+}
+
+
+Now I have also "signed" this transaction with a code "39692" which is 
+a CRC checksum that I use to refer to myself. It is unlikely that anyone 
+that I might deal with you use such a notion, so it is quite distinct.
+
+Because we now have much more data, I would also add a Shoctal code:
+
+> a.f dogecoin | a.S
+5475783249.454
+
+Of this code, I just grab the first seven numbers. Shoctal codes contain no
+zero or one and do not naturally appear in a meaningful number of transactions.
+So to further develop the function, or chord, I add a bit of recursion.
+
+dogecoin () 
+{ 
+    : DCxFUNhTiMESxdbzzzzzzzzzzzzzYYTsyU 0.04386886;
+    : DDxQmbR9zejrFt3WxTnLBwjh4GzzYUd2bY 0.00010000;
+    : DExXBgz9eut2wyXWMQfab2p5MhzzcRB1Vi 0.00039692
+}
+
+This can be transformed directly into a "sendmany" command:
+
+dogecoin-cli sendmany "" "{\
+\"DCxFUNhTiMESxdbzzzzzzzzzzzzzYYTsyU\":0.04386886,\
+\"DDxQmbR9zejrFt3WxTnLBwjh4GzzYUd2bY\":0.00010000,\
+\"DExXBgz9eut2wyXWMQfab2p5MhzzcRB1Vi\":0.00039692}"
+
+If the above chord were loaded into dogecoin (digibyte or verge)
+a single financial transaction could be understood to reference it:
+
+dogecoin:DEXB3g3BAmX28CLYg6jTZiet6vq2i4bUPP?amount=6000.04386886
+

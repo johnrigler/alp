@@ -1,0 +1,16 @@
+
+This python script is available in on github:
+
+https://github.com/johnrigler/unspendable
+
+The command requires at least one parameter, if two
+are given, the second is transformed into a Base58-hash
+language which is of course limited, yet still quite
+readable. I use these in conjunction bitcoin and its
+variants. Messages can be placed into the ledger and
+then later discovered in a myriad of ways.
+
+Example:
+
+unspendable.py DCx "this is the stuff"
+DCxTHiSxiSxTHExSTUFFzzzzzzzzbSG1oo

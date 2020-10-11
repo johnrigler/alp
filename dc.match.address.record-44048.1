@@ -1,0 +1,4 @@
+dc.match.address.record () 
+{ 
+    echo "select * from record where address like '$1%$2' order by tstamp" | mysql dimecash
+}

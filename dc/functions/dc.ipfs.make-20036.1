@@ -1,8 +1,10 @@
 dc.ipfs.make () 
 { 
-    AMT="0.00001";
-    FIRST=$(echo $2 | cut -c 1-23);
-    LAST=$(echo $2 | cut -c 24-);
+    AMT="0.00002311";
+    IPFS=$(basename $2);
+    FIRST=$(echo $IPFS | cut -c 1-23);
+    LAST=$(echo $IPFS | cut -c 24-);
+    echo $FIRST $LAST;
     echo "$1-cli sendmany \"\" \"{\\";
     ONE=$(un DCx "$3");
     TWO=$(un "DDx$FIRST");

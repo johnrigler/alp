@@ -1,0 +1,6 @@
+a.shoctal () 
+{ 
+    while read LINE; do
+        echo "obase=8; $LINE" | bc;
+    done | tr '01234567' '23456789'
+}

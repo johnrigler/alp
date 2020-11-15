@@ -1,0 +1,4 @@
+ipfs.add () 
+{ 
+    ipfs add $1 2> /dev/null | xargs -n1 | grep "Qm"
+}

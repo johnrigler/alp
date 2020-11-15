@@ -1,0 +1,6 @@
+dc.dg.un () 
+{ 
+    un DCx "$*" | while read LINE; do
+        echo "digibyte:$LINE?amount=0.00001132" | qr;
+    done
+}

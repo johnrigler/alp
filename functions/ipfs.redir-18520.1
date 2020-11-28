@@ -1,0 +1,4 @@
+ipfs.redir () 
+{ 
+    echo "<head> <meta http-equiv='Refresh' content='0; url=$1' /> </head>" | ipfs add 2> /dev/null | xargs -n1 | grep "^Qm" | head -1
+}

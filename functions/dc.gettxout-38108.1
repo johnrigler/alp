@@ -1,0 +1,10 @@
+dc.gettxout () 
+{ 
+    txid=$1;
+    for n in 0 1 2 3 4 5 6;
+    do
+        digibyte-cli gettxout "$txid" $n;
+    done | egrep '^      "D|value' | xargs -n3 | while read A B C; do
+        echo $C $B;
+    done | sed 's/,//g' | sort
+}

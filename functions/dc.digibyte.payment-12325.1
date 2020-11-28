@@ -1,0 +1,19 @@
+dc.digibyte.payment () 
+{ 
+    while true; do
+        /usr/local/bin/digibyte-cli listreceivedbyaddress | jq .[0] | grep "^    \"" | cut -c 6-69 | while read A; do
+            /usr/local/bin/digibyte-cli gettransaction $A;
+        done | grep "^  \"amo" | cut -c 15-22 > /tmp/$$;
+        cd /var/www/html/dgb/jobs;
+        ls 0* 2> /dev/null | while read pending; do
+            grep $pending /tmp/$$;
+            if [[ $? -eq 0 ]]; then
+                tx=$(. $pending);
+                mv $pending $tx;
+                echo $tx;
+            fi;
+        done;
+        rm /tmp/$$;
+        sleep 4;
+    done
+}

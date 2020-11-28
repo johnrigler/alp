@@ -22,7 +22,7 @@ fun.times() {
 -() { echo $*; }
 - "We had joy, we had fun"
 - "We had seasons in the sun"
-- "Etc. etc. We miss you Lou Reed"
+- "Etc. etc."
 }
 
 The function above will type stuff out when run, but it is also a store of data. In ALP

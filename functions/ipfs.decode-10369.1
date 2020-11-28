@@ -1,0 +1,8 @@
+ipfs.decode () 
+{ 
+    cat > $$;
+    echo "-----------------------------";
+    T=$(cat $$ | xargs -n1 | egrep 'DDx|DEx' | sort | cut -c 4-26 | xargs -n2 | sed 's/ //g');
+    echo "$T";
+    echo "https://ipfs.io/ipfs/$T"
+}

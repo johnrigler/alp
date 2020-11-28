@@ -1,0 +1,12 @@
+a.eval () 
+{ 
+    :: Initial EVAL FUNCTION;
+    _WD=$(pwd);
+    cd $_ALP_/$1/functions;
+    ls | while read FUNCTION; do
+        echo ". $_ALP_/$1/functions/$FUNCTION";
+    done > $HOME/exec.$$;
+    . $HOME/exec.$$;
+    rm $HOME/exec.$$;
+    cd $_WD
+}

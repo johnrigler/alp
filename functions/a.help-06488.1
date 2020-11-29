@@ -1,9 +1,0 @@
-a.help () 
-{ 
-    __T=a.help;
-    : : Help Facility;
-    a.l | while read CMD; do
-        _HELP=$(a.f $CMD | grep "^    : :");
-        - "$CMD	$_HELP";
-    done
-}

@@ -6,7 +6,7 @@ Alp is used to repurpose the bash function as a native data store.
 Here is an example. Given that a function called 'example' is loaded
 into the shell, the following command will return it's content in
 a standard way. 
-
+<pre>
 > a.f example
 example () 
 { 

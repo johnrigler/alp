@@ -49,3 +49,9 @@ render special purpose code in the "alp" style. I install "alp" into
 
 I usually end up creating a module where I work and this gives a nice wall of 
 separation between /opt/alp and customer code. 
+
+Add this to your .bashrc file (which should be in your home directory):
+
+export _ALP_=/opt/alp
+. $_ALP_/alp.bash
+

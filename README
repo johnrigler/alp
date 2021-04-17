@@ -39,7 +39,7 @@ fun.times() {
 # Take a walk of the wild side.
 }
 
-Since I didn't actually type the above functions into a shell, I will cut and paste them in now. I can then call them back with "declare -f fun.times".
+Since I didn't actually type the above functions into a shell ( Partly because this song was't by Lou Reed actually ( funny story) , I will cut and paste them in now. I can then call them back with "declare -f fun.times".
 
 The first:
 

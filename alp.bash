@@ -52,22 +52,18 @@ alp() {
 
 a.f () 
 { 
-    :: Shows Specified ALP Function, takes one argument;
     declare -f -- $1
 }
 a.F ()
 {
-    :: Shows Function names;
     declare -F -- $1
 }
 -()
 {
-    :: Special EVAL operator;
     echo "$*";
 }
 
 a.eval() {
-    :: Initial EVAL FUNCTION
 _WD=$(pwd);
 
 cd $_ALP_/functions;
@@ -90,7 +86,7 @@ cd $_ALP_;
 a.Sh () 
 { 
     local __T=a.Sh;
-    : : renders a Seven Digit Shoctal;
+    : renders a Seven Digit Shoctal;
     T=$(cksum | awk '{ print $1 }' | tr '01234567' '23456789' | cut -c 1-7);
     echo ".0$T"
 }
@@ -102,3 +98,5 @@ un ()
 
     python3 $_ALP_/QmZEF7LGBicfaNgtoJyT2uo11YX7L6SYdKMYA1tAMH6pfc $_ARG1 "$*"
 }
+
+a.eval

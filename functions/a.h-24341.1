@@ -1,0 +1,19 @@
+a.h () 
+{ 
+    : a.h;
+    : : Transforms the last command into a function;
+    : : the h stands for her.story;
+    : : which is simply a pun;
+    : : on the -nix command that this;
+    : : enhances;
+    t=$(history 2 | head -1);
+    cmd=$(- "$t" | while read first rest; do
+        - $rest;
+    done);
+    cmd=$(
+    - $1'. ~~ ~~ \:\; ~~';
+    - $cmd;
+);
+    eval $1 '() {' $cmd'; }';
+    a.f $1 | sed 's/~~/()/' | sed 's/~~/{/' | sed 's/~~/}/' | sed 's/\\//g'
+}

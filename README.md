@@ -24,8 +24,8 @@ a.f ()
 The double-underscore "T" variable is an internalization of the function's
 name. The ": :" line is retrieved by 'a.help'.
 
-All of the "alp" functions can be seen by typing "a." and hitting tab. 'a.f' 
-can be used to show content. 'a.v' edits the function live and puts it back 
+Almost all of the "alp" functions can be seen by typing "a." and hitting tab. 'a.f' 
+can be used to show content.[1] 'a.v' edits the function live and puts it back 
 into memory. To save a function, it must be written into the "functions" 
 subdirectory. This is done with the 'a.fs' command. The function is then 
 rendered into a single file where its name contains its simple (BSD) sum:
@@ -55,3 +55,13 @@ Add this to your .bashrc file (which should be in your home directory):
 export _ALP_=/opt/alp
 . $_ALP_/alp.bash
 
+<hr>
+[1] One notable exception is the minus function. The minus symbol can be
+overloaded to serve different purposes, but I almost exclusively use it to
+mean print to screen. This drives towards the high level of human readability 
+of the fuctions. A YAML reader could be hastily assembled by defining a value for 
+triple minus in a similar style:
+
+ ---() { :; } 
+
+A minus function could also be seen as a lambda function within this system. 

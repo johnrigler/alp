@@ -1,0 +1,68 @@
+#!/bin/bash 
+fiona() {
+f.iona ()
+{
+    : START HERE;
+    function f.ssh.add ()
+    {
+        ssh-keygen -t;
+        - *.rsa *.rsa_pub
+    }
+}
+
+f.dir ()
+{
+    cd ~/FioNA
+}
+f.2023 ()
+{
+    f.dir;
+    cd 2023
+}
+f.mkdir ()
+{
+    W=$(a.date.W);
+    w=$(a.date.w);
+    mkdir $W$w 2> /dev/null
+}
+
+un_ () {
+        pre=$1;
+        shift 1
+        amt=$1;
+        if [[ $amt == '-' ]]
+        then
+                amt="0.00000550"
+        fi
+        shift 1
+        echo -n "$amt ";
+        t=$(un $pre $*);
+        echo $t
+        echo $t | qr $t > $t.png
+}
+
+DAx ()
+{
+        un_ DAx $*;
+}
+DBx ()
+{
+        un_ DBx $*;
+}
+DCx ()
+{
+        un_ DCx $*;
+}
+
+OPR ()
+{
+        echo -n "OPR "
+        echo -n $1 | xxd -p
+        -
+}
+
+input ()
+{
+        digibyte-cli listunspent | egrep '\[|{|}|]|txid|vout|safe' | sed 's/"/\\"/g'
+}
+}

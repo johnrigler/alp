@@ -1,0 +1,8 @@
+a.fss () 
+{ 
+    __T=a.fss;
+    : : Replaces CRC sum with shasum;
+    _FS=$(- $1-$(a.f $1 | a.ss) );
+    a.f $1 > $_FS;
+    - $_FS
+}

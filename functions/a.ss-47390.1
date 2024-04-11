@@ -1,0 +1,10 @@
+a.ss () 
+{ 
+    __T=a.ss;
+    : : Creates a shasum extension;
+    t=$(shasum | cut -c 1-4);
+    sum=$(printf "%o" $((16#$t)));
+    - $sum | tr '01234567' '23456789' | while read a; do
+        echo "02"$a;
+    done
+}

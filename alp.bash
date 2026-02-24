@@ -46,8 +46,14 @@ alp() {
 # Finally, you must run a cryptocurrency
 # This will work with dogecoind, digibyted (and probably verge)
 
-# DiMECASH (https://dime.cash) is built with ALP
-# and is a running example of how it works.
+# DiMECASH (https://dime.cash) was built with ALP
+# ALP is no longer associated with some DNS name, as that would
+# be too centralized. Instead, it is references as the 
+# D-form obviously unspendables:
+# DAxALPzzz <-- first person (The book character)
+# DBxALPzzz <-- second protocol level association
+# DCxALPzzz <-- third person (Narrative channel
+#
 }
 
 a.f () 
@@ -91,12 +97,12 @@ a.Sh ()
     echo ".0$T"
 }
 un () 
-{ 
+{
     local __T="un";
     local _ARG1=$1;
     shift; 
 
-    python3 $_ALP_/QmZEF7LGBicfaNgtoJyT2uo11YX7L6SYdKMYA1tAMH6pfc $_ARG1 "$*"
+    python3 $_UN_/unspendable.py $_ARG1 "$*"
 }
 
 a.eval

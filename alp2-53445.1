@@ -1,0 +1,14 @@
+alp2 () 
+{ 
+    _ALP2_="${_ALP2_:-${HOME}/alp2}";
+    while IFS= read -r file || [[ -n "$file" ]]; do
+        [[ -z "$file" || "$file" == \#* ]] && continue;
+        path="$_ALP2_/$file";
+        if [[ -f "$path" ]]; then
+            . "$path";
+        else
+            printf 'ALP2: missing %s\n' "$path" 1>&2;
+        fi;
+    done < "$_ALP2_/.files.txt";
+    unset file path
+}

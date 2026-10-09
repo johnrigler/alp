@@ -56,53 +56,21 @@ alp() {
 #
 }
 
-a.f () 
-{ 
-    declare -f -- $1
-}
-a.F ()
+- () { printf '%s\n' "$*"; }
+
+un ()
 {
-    declare -F -- $1
-}
--()
-{
-    echo "$*";
-}
-
-a.eval() {
-_WD=$(pwd);
-
-cd $_ALP_/functions;
-
-ls | while read FUNCTION
-do
-	echo ". $_ALP_/functions/$FUNCTION"
-done > $HOME/exec.$$
-
-. $HOME/exec.$$
-rm $HOME/exec.$$
-cd $_WD;
-} 
-a.dir () 
-{ 
-cd $_ALP_;
-}
-## End of ALP function
-## ALP
-a.Sh () 
-{ 
-    local __T=a.Sh;
-    : renders a Seven Digit Shoctal;
-    T=$(cksum | awk '{ print $1 }' | tr '01234567' '23456789' | cut -c 1-7);
-    echo ".0$T"
-}
-un () 
-{
-    local __T="un";
-    local _ARG1=$1;
-    shift; 
-
-    python3 $_UN_/unspendable.py $_ARG1 "$*"
+    local _alp_un_prefix=${1:-};
+    [[ $# -gt 0 ]] || return 2;
+    shift;
+    python3 "$_UN_/unspendable.py" "$_alp_un_prefix" "$*";
 }
 
+# The installation can stay outside every working directory.
+# Source this file into Bash; alp2 selects a separate directory of functions.
+if [[ -z ${_ALP_:-} ]]; then
+    _ALP_=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P) || return;
+fi;
+. "$_ALP_/alp2.bash" || return;
+. "$_ALP_/core.bash" || return;
 a.eval

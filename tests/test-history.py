@@ -39,3 +39,44 @@ expected = ['HISTORY_QUOTING_OK', 'HISTORY_MULTILINE_OK', 'HISTORY_NAME_OK']
 if run.returncode or not all(marker in run.stdout for marker in expected):
     raise SystemExit(f'History checks failed ({run.returncode})\n{run.stdout}\n{run.stderr}')
 print('All interactive history checks passed.')
+
+edge_cases = {
+    'empty history': '''history -c
+a.h absent.function 2>/dev/null && exit 31
+declare -F absent.function >/dev/null && exit 32
+''',
+    'repeated capture': '''history -c
+printf '%s\\n' 'original command'
+a.h retained.function
+a.h retained.function 2>/dev/null && exit 33
+[[ $(retained.function) == 'original command' ]] || exit 34
+''',
+    'single name argument': '''a.h one.name 123 2>/dev/null && exit 35
+declare -F one.name >/dev/null && exit 36
+''',
+    'failed history command': '''UNEXPECTED_EXECUTION=0
+history -s '}; UNEXPECTED_EXECUTION=1; unrelated.function () {'
+a.h invalid.function 2>/dev/null && exit 37
+[[ $UNEXPECTED_EXECUTION == 0 ]] || exit 38
+declare -F invalid.function >/dev/null && exit 39
+''',
+    'ignored capture invocation': '''HISTCONTROL=ignorespace
+history -c
+printf '%s\\n' 'recorded command'
+ a.h spaced.function
+[[ $(spaced.function) == 'recorded command' ]] || exit 40
+''',
+}
+prefix = f'''HISTFILE=/dev/null
+PS1=''
+PS2=''
+. {shlex.quote(str(root / 'core.bash'))}
+HISTCONTROL=''
+'''
+for name, case in edge_cases.items():
+    run = subprocess.run(['bash', '--noprofile', '--norc', '-i'],
+                         input=prefix + case + 'exit 0\n', text=True,
+                         capture_output=True, env=env)
+    if run.returncode:
+        raise SystemExit(f'{name} failed ({run.returncode})\n{run.stdout}\n{run.stderr}')
+print('All minimal history-capture edge checks passed.')

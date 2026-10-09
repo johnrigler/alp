@@ -98,13 +98,15 @@ a.h ()
 {
     : : Capture the previous history command as a function without running it;
     local _alp_history_name=${1:-} _alp_history_body _alp_history_definition;
-    [[ "$_alp_history_name" =~ ^[A-Za-z_.-][A-Za-z0-9_.-]*$ ]] || { printf 'usage: a.h function.name [history-event]\n' >&2; return 2; };
-    _alp_history_body=$(builtin fc -ln "${2:--1}" "${2:--1}") || return;
-    [[ -n "$_alp_history_body" ]] || { printf 'a.h: no history command\n' >&2; return 1; };
+    [[ $# == 1 && "$_alp_history_name" =~ ^[A-Za-z_.-][A-Za-z0-9_.-]*$ ]] || { printf 'usage: a.h function.name\n' >&2; return 2; };
+    _alp_history_body=$(builtin fc -ln -1 -1) || return;
+    if [[ -z "$_alp_history_body" || "$_alp_history_body" =~ ^[[:space:]]*a\.h([[:space:]]|$) ]]; then
+        printf 'a.h: no preceding command to capture\n' >&2;
+        return 1;
+    fi;
+    printf '%s\n' "$_alp_history_body" | bash -n || return;
     _alp_history_definition=$(printf '%s ()\n{\n%s\n}\n' "$_alp_history_name" "$_alp_history_body");
-    printf '%s\n' "$_alp_history_definition" | bash -n || return;
-    eval "$_alp_history_definition" || return;
-    declare -f -- "$_alp_history_name";
+    eval "$_alp_history_definition";
 }
 
 a.v ()

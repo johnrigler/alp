@@ -78,7 +78,6 @@ unusual formats. Files over 1 MB are displayed without coloring.
 
 ```bash
 a.h d.task            # Define a function from the previous history command.
-a.h d.task 123        # Select a specific history event.
 a.v d.task            # Edit the live definition; validate before reloading.
 a.fs d.task           # Save with the original BSD sum filename.
 a.fS d.task           # Save with shifted-octal cksum.
@@ -87,7 +86,12 @@ a.save d.task . d.s   # Use another namespace's existing checksum function.
 ```
 
 `a.h` uses Bash's `fc` builtin to preserve quotes, pipes, whitespace, and multiline
-history entries. It defines the function without executing its body. `a.v` uses
+history entries. Run it as its own command after the command you want to capture.
+It accepts one function name and defines it in the current shell, without printing,
+running, or saving it. Use `a.f NAME` to inspect it and `a.fs NAME` to save it.
+Only commands recorded in history can be captured. Empty history and a preceding
+`a.h` invocation are rejected, and the recorded command is syntax-checked before
+wrapping it in a function. `a.v` uses
 `VISUAL`, then `EDITOR`, then `vi`; set these to an editor executable. Failed
 syntax checks keep the live definition and leave the edited file for recovery.
 Saving uses local scratch variables and reports a missing function rather than

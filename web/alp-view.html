@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ALP · Source browser</title>
+<style>
+:root{color-scheme:dark;--bg:#10151b;--panel:#171f29;--line:#2c3949;--text:#e2e9f1;--muted:#a4b5c8;--accent:#79c9ed}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 system-ui,sans-serif}
+header{padding:20px 26px;border-bottom:1px solid var(--line);display:flex;gap:20px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+h1{font-size:21px;font-weight:650;margin:0}header p{margin:3px 0 0;color:var(--muted);font-size:13px}
+button,select,input{font:inherit}button,select,.folder-label{border:1px solid var(--line);border-radius:6px;background:var(--panel);color:var(--text);padding:7px 11px;cursor:pointer}button:hover,.folder-label:hover{border-color:var(--accent)}button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+#folder{position:absolute;width:1px;height:1px;opacity:0}.folder-label{display:inline-block}#folder:focus-visible+.folder-label{outline:2px solid var(--accent)}
+main{display:grid;grid-template-columns:280px minmax(0,1fr);min-height:calc(100vh - 104px)}aside{padding:20px 16px;border-right:1px solid var(--line)}#directory{overflow-wrap:anywhere;font-size:14px;margin:0 0 12px}#filter{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--text)}
+#listing{display:flex;flex-direction:column;gap:4px;margin-top:12px}.entry{text-align:left;display:flex;gap:10px;justify-content:space-between;align-items:baseline;background:transparent;border-color:transparent;padding:9px 8px}.entry span:first-child{overflow-wrap:anywhere}.entry[aria-current=true]{background:#243346;border-color:#42617d}.badge{font:10px/1.5 ui-monospace,monospace;color:var(--muted);flex-shrink:0}.badge[data-action=source]{color:#abd98b}.badge[data-action=script]{color:#f2c27d}
+article{min-width:0}#toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:16px 22px;border-bottom:1px solid var(--line)}#filename{font:14px ui-monospace,monospace;overflow-wrap:anywhere;flex:1;min-width:100px}#toolbar label{font-size:12px;color:var(--muted)}#language{padding:5px}#status{margin:0;padding:12px 22px;color:var(--muted);font-size:13px}#status:empty{display:none}#source{margin:0;padding:22px;overflow:auto;tab-size:4;font:13px/1.7 ui-monospace,SFMono-Regular,Consolas,monospace;white-space:pre}#source code{font:inherit}#media{padding:22px}#media:empty{display:none}#media img,#media video{max-width:100%;max-height:75vh}#media audio{max-width:100%}
+.tok-comment{color:#83b58d}.tok-string{color:#e8cf8a}.tok-keyword{color:#caa6ed}.tok-variable{color:#80cfe1}.tok-function{color:#9bbaef}.tok-number{color:#eeaa7b}.tok-operator{color:#bbc5d2}.tok-tag{color:#80cfe1}
+@media(max-width:720px){header{padding:16px}main{display:block}aside{border-right:0;border-bottom:1px solid var(--line);padding:14px 16px}#listing{max-height:27vh;overflow:auto}#toolbar{padding:12px 16px}#source{padding:16px;font-size:12px}#status{padding:12px 16px}}
+</style>
+</head>
+<body>
+<header><div><h1>ALP <span style="color:var(--muted);font-weight:400">/ Source browser</span></h1><p>Read definitions, scripts, and files in their original form.</p></div><div><input id="folder" type="file" webkitdirectory multiple><label class="folder-label" for="folder">Open local folder</label> <button id="reload" type="button">Reload</button></div></header>
+<main>
+<aside><p id="directory">Directory</p><input id="filter" type="search" aria-label="Filter files" placeholder="Filter files…"><nav id="listing" aria-label="Directory files"></nav></aside>
+<article><div id="toolbar"><strong id="filename">Choose a file</strong><label for="language">Color as</label><select id="language"><option value="auto">Auto</option><option value="bash">Bash</option><option value="javascript">JavaScript</option><option value="python">Python</option><option value="json">JSON</option><option value="html">HTML</option><option value="css">CSS</option><option value="text">Plain text</option></select><button id="copy" type="button" disabled>Copy source</button><button id="download" type="button" disabled>Download</button></div><p id="status" role="status" aria-live="polite"></p><pre id="source"><code></code></pre><div id="media"></div></article>
+</main>
+<script>
+'use strict';
+// Small lexical colorizer, not a shell parser. Rendering always preserves the text.
+function colorTokens(text, language) {
+  if (language === 'text' || text.length > 1000000) return [{text, kind: ''}];
+  const keywords = new Set(({
+    bash: 'if then else elif fi for while until do done case esac in function local declare export readonly return break continue source eval printf read unset shift select coproc time',
+    javascript: 'const let var function return if else for while do switch case break continue class new async await import export from throw try catch finally typeof instanceof this null true false undefined',
+    python: 'def class return if else elif for while in not and or import from as try except finally raise with lambda pass break continue True False None yield async await',
+    json: 'true false null'
+  }[language] || '').split(' '));
+  const tokens = [];
+  let position = 0, plain = '';
+  function emit(value, kind) {
+    if (plain) { tokens.push({text: plain, kind: ''}); plain = ''; }
+    tokens.push({text: value, kind}); position += value.length;
+  }
+  while (position < text.length) {
+    const rest = text.slice(position), char = rest[0];
+    if ((language === 'bash' || language === 'python') && char === '#' &&
+        (language === 'python' || position === 0 || /\s/.test(text[position - 1]))) {
+      emit(rest.match(/^[^\n]*/)[0], 'comment'); continue;
+    }
+    if (['javascript','css'].includes(language) && rest.startsWith('/*')) {
+      const end = rest.indexOf('*/', 2); emit(end < 0 ? rest : rest.slice(0, end + 2), 'comment'); continue;
+    }
+    if (language === 'javascript' && rest.startsWith('//')) {
+      emit(rest.match(/^[^\n]*/)[0], 'comment'); continue;
+    }
+    if (language === 'html' && rest.startsWith('<!--')) {
+      const end = rest.indexOf('-->', 4); emit(end < 0 ? rest : rest.slice(0, end + 3), 'comment'); continue;
+    }
+    if (language === 'html' && /^<\/?[A-Za-z!]/.test(rest)) {
+      const tag = rest.match(/^<[^>]*>/); if (tag) { emit(tag[0], 'tag'); continue; }
+    }
+    if (char === '"' || char === "'" || (char === '`' && ['bash','javascript'].includes(language))) {
+      const triple = language === 'python' && rest.startsWith(char.repeat(3));
+      const delimiter = triple ? char.repeat(3) : char;
+      let end = delimiter.length;
+      while (end < rest.length) {
+        if (rest[end] === '\\' && !(language === 'bash' && char === "'")) { end += 2; continue; }
+        if (rest.startsWith(delimiter, end)) { end += delimiter.length; break; }
+        end++;
+      }
+      emit(rest.slice(0, end), 'string'); continue;
+    }
+    if (language === 'bash' && char === '$') {
+      const variable = rest.match(/^\$(?:\{[^}\n]*\}|\([^\n]*?\)|[A-Za-z_][A-Za-z0-9_]*|[0-9@*?#$!_-])/);
+      if (variable) { emit(variable[0], 'variable'); continue; }
+    }
+    const fn = language === 'bash' && rest.match(/^[A-Za-z_.-][A-Za-z0-9_.-]*(?=\s*\(\s*\))/);
+    if (fn) { emit(fn[0], 'function'); continue; }
+    const word = rest.match(/^[A-Za-z_][A-Za-z0-9_]*/);
+    if (word) {
+      if (keywords.has(word[0])) emit(word[0], 'keyword');
+      else { plain += word[0]; position += word[0].length; }
+      continue;
+    }
+    const number = rest.match(/^\b\d+(?:\.\d+)?\b/);
+    if (number) { emit(number[0], 'number'); continue; }
+    if (/[|&;(){}\[\]<>]/.test(char)) { emit(char, 'operator'); continue; }
+    plain += char; position++;
+  }
+  if (plain) tokens.push({text: plain, kind: ''});
+  return tokens;
+}
+
+function parseManifest(text) {
+  return text.split('\n').map(line => line.replace(/\r$/, '')).filter(line => line.trim() && !/^\s*#/.test(line)).map(line => {
+    const tab = line.indexOf('\t');
+    return tab < 0 ? {action:'source', name:line} : {action:line.slice(0,tab), name:line.slice(tab+1)};
+  });
+}
+function safePath(path) { return !path.startsWith('/') && !path.split('/').some(part => part === '..' || part === '.'); }
+function inferLanguage(name, text = '') {
+  const original = name, base = name.replace(/-[0-9]+(?:\.[0-9]+)?$/, '');
+  if (/\.(js|mjs)$/.test(base)) return 'javascript';
+  if (/\.py$/.test(base) || /^#![^\n]*\bpython[0-9]*\b/.test(text)) return 'python';
+  if (/\.json$/.test(base)) return 'json';
+  if (/\.html?$/.test(base)) return 'html';
+  if (/\.css$/.test(base)) return 'css';
+  if (/\.(bash|sh)$/.test(base) || original !== base || /^#![^\n]*\b(bash|sh)\b/.test(text) || /^\s*(?:function\s+)?[A-Za-z_.-][\w.-]*\s*\(\s*\)/m.test(text)) return 'bash';
+  return 'text';
+}
+const listing = document.querySelector('#listing'), status = document.querySelector('#status');
+const code = document.querySelector('#source code'), media = document.querySelector('#media');
+const language = document.querySelector('#language'), copy = document.querySelector('#copy');
+const download = document.querySelector('#download'), filter = document.querySelector('#filter');
+let entries = [], localFiles = null, directory = '', selected = '', sourceText = '', selectedBlob = null;
+let mediaURL = null, requestNumber = 0, folderName = '', copyNoticeTimer = null;
+function fileURL(path) {
+  if (!safePath(path)) throw new Error('Invalid relative path');
+  return new URL(path.split('/').map(encodeURIComponent).join('/'), new URL('.', location.href));
+}
+async function readFile(path) {
+  if (!safePath(path)) throw new Error('Invalid relative path');
+  if (localFiles) { const file = localFiles.get(path); if (!file) throw new Error('File is missing: ' + path); return file; }
+  const response = await fetch(fileURL(path), {cache:'no-cache'});
+  if (!response.ok) throw new Error('Could not load ' + path + ' (HTTP ' + response.status + ')');
+  return response.blob();
+}
+function saveLocation() {
+  const params = new URLSearchParams();
+  if (directory) params.set('dir',directory);
+  if (selected) params.set('file',selected);
+  history.replaceState(null,'',location.pathname + location.search + (params.size ? '#' + params : ''));
+}
+function drawListing() {
+  listing.replaceChildren();
+  if (directory) {
+    const up = document.createElement('button'); up.textContent = '↑ Parent directory'; up.className = 'entry';
+    up.onclick = () => openDirectory(directory.split('/').slice(0,-1).join('/')); listing.append(up);
+  }
+  for (const entry of entries.filter(item => item.name.toLowerCase().includes(filter.value.toLowerCase()))) {
+    const button = document.createElement('button'), name = document.createElement('span'), badge = document.createElement('span');
+    button.className = 'entry'; button.type = 'button'; button.setAttribute('aria-current', String(entry.name === selected));
+    name.textContent = entry.name + (entry.action === 'directory' ? '/' : '');
+    badge.className = 'badge'; badge.dataset.action = entry.action; badge.textContent = entry.action;
+    button.append(name,badge); button.onclick = () => entry.action === 'directory' ? openDirectory([directory,entry.name].filter(Boolean).join('/')) : openFile(entry.name);
+    listing.append(button);
+  }
+}
+function clearSelection() {
+  sourceText = ''; selectedBlob = null; selected = ''; code.replaceChildren(); media.replaceChildren();
+  if (mediaURL) { URL.revokeObjectURL(mediaURL); mediaURL = null; }
+  document.querySelector('#source').hidden = false;
+  document.querySelector('#filename').textContent = 'Choose a file'; copy.disabled = true; download.disabled = true;
+}
+function drawSource() {
+  const mode = language.value === 'auto' ? inferLanguage(selected, sourceText) : language.value;
+  code.replaceChildren();
+  for (const token of colorTokens(sourceText, mode)) {
+    if (!token.kind) code.append(document.createTextNode(token.text));
+    else { const span = document.createElement('span'); span.className = 'tok-' + token.kind; span.textContent = token.text; code.append(span); }
+  }
+}
+function localEntries(dir) {
+  const prefix = dir ? dir + '/' : '', found = new Map();
+  for (const path of localFiles.keys()) {
+    if (!path.startsWith(prefix)) continue;
+    const tail = path.slice(prefix.length), name = tail.split('/')[0];
+    if (!name || name.startsWith('.') || name === 'alp-view.html') continue;
+    const folder = tail.includes('/'); found.set(name, {name,action:folder?'directory':'view'});
+  }
+  return [...found.values()].sort((a,b) => a.name < b.name ? -1 : a.name > b.name ? 1 : 0);
+}
+async function openDirectory(dir, initialFile = '') {
+  if (!safePath(dir)) { status.textContent = 'Invalid directory path'; return; }
+  const request = ++requestNumber; clearSelection(); entries = []; drawListing();
+  directory = dir; document.querySelector('#directory').textContent = (localFiles ? folderName + '/' : './') + directory;
+  status.textContent = 'Reading directory…';
+  try {
+    let result;
+    try { result = parseManifest(await (await readFile([directory,'.files.txt'].filter(Boolean).join('/'))).text()); }
+    catch (error) { if (!localFiles) throw error; result = localEntries(directory); }
+    if (request !== requestNumber) return;
+    entries = result.filter(entry => safePath(entry.name) && entry.name && ['source','script','view','directory'].includes(entry.action));
+    drawListing(); status.textContent = entries.length + ' entries. Select a file to read its source.'; saveLocation();
+    if (initialFile && entries.some(entry => entry.name === initialFile && entry.action !== 'directory')) await openFile(initialFile);
+  } catch (error) {
+    if (request !== requestNumber) return;
+    status.textContent = location.protocol === 'file:' && !localFiles ? 'Open a local folder, or serve this directory over HTTP. The hosted view reads .files.txt.' : error.message + '. Generate this directory’s manifest with a.index.';
+  }
+}
+async function openFile(name) {
+  if (!entries.some(entry => entry.name === name && entry.action !== 'directory')) return;
+  const request = ++requestNumber; clearSelection(); selected = name; drawListing(); saveLocation();
+  document.querySelector('#filename').textContent = name; status.textContent = 'Reading file…';
+  try {
+    const blob = await readFile([directory,name].filter(Boolean).join('/'));
+    if (request !== requestNumber) return;
+    selectedBlob = blob; download.disabled = false;
+    const ext = name.toLowerCase().replace(/-[0-9]+(?:\.[0-9]+)?$/, '').split('.').pop();
+    if (['png','jpg','jpeg','gif','webp','avif','mp4','webm','mp3','ogg','wav'].includes(ext)) {
+      const tag = ['mp4','webm'].includes(ext) ? 'video' : ['mp3','ogg','wav'].includes(ext) ? 'audio' : 'img';
+      const element = document.createElement(tag); mediaURL = URL.createObjectURL(blob); element.src = mediaURL;
+      if (tag === 'img') element.alt = name; else element.controls = true;
+      media.append(element); document.querySelector('#source').hidden = true;
+    } else {
+      const text = await blob.text(); if (request !== requestNumber) return; sourceText = text;
+      drawSource(); copy.disabled = false;
+    }
+    status.textContent = blob.size.toLocaleString() + ' bytes · ' + (media.childNodes.length ? 'media' : inferLanguage(name,sourceText));
+  } catch (error) { if (request === requestNumber) status.textContent = error.message; }
+}
+filter.addEventListener('input', drawListing); language.addEventListener('change', drawSource);
+document.querySelector('#reload').onclick = () => openDirectory(directory,selected);
+document.querySelector('#folder').addEventListener('change', async event => {
+  const files = [...event.target.files]; if (!files.length) return;
+  folderName = files[0].webkitRelativePath.split('/')[0]; localFiles = new Map();
+  for (const file of files) localFiles.set(file.webkitRelativePath.split('/').slice(1).join('/'),file);
+  filter.value = ''; await openDirectory('');
+});
+copy.onclick = async () => {
+  try {
+    await navigator.clipboard.writeText(sourceText); copy.textContent = 'Copied';
+    clearTimeout(copyNoticeTimer); copyNoticeTimer = setTimeout(() => { copy.textContent = 'Copy source'; }, 1300);
+  } catch (error) { status.textContent = 'Clipboard unavailable. Select the source text and copy it directly.'; }
+};
+download.onclick = () => {
+  if (!selectedBlob) return;
+  const link = document.createElement('a'), url = URL.createObjectURL(selectedBlob);
+  link.href = url; link.download = selected; link.click(); setTimeout(() => URL.revokeObjectURL(url),1000);
+};
+window.addEventListener('hashchange', () => { const params = new URLSearchParams(location.hash.slice(1)); openDirectory(params.get('dir') || '',params.get('file') || ''); });
+const initial = new URLSearchParams(location.hash.slice(1)); openDirectory(initial.get('dir') || '',initial.get('file') || '');
+</script>
+</body>
+</html>

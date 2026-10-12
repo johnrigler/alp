@@ -1,0 +1,16 @@
+d.date () 
+{ 
+    :;
+    if [[ -z $1 ]]; then
+        date;
+    else
+        date "+%"$1;
+    fi;
+    : date "+%u";
+    :;
+    function d.date_ () 
+    { 
+        : specific code;
+        date "+%Y/%W%u/"
+    }
+}
